@@ -1,25 +1,15 @@
 CACHE MANIFEST
-# rev 1
-
-
+# rev 2
 ./dice.html
 ./index.html
 ./gm_control.html
 ./chargen.html
-
-
 ./css/bootstrap.min.css
 ./css/style.css
-
-
 ./fonts/glyphicons-halflings-regular.eot
 ./fonts/glyphicons-halflings-regular.svg
 ./fonts/glyphicons-halflings-regular.ttf
 ./fonts/glyphicons-halflings-regular.woff
-
-
-
-
 ./js/background.js
 ./js/bootstrap.min.js
 ./js/dice.js
