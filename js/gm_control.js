@@ -137,7 +137,7 @@ function gm_control_display_sheet() {
 			set_events = true;
 		}
 	} else {
-		html += "<tr><td colspan='10'>There are no items in your control sheet</td></tr>"
+		html += "<tr><td colspan='11'>There are no items in your control sheet</td></tr>"
 	}
 
 	$(".js-gm-control-sheet-display-data").html( html );
