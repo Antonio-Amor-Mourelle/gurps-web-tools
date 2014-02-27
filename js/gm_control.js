@@ -7,7 +7,6 @@ function gm_control_propogate_mooks() {
 		gm_control_sheet.push( new class_character());
 		gm_control_sheet[count].set_name("Long Name Mook #" + (count+1));
 	}
-
 }
 
 function gm_control_display_sheet() {
@@ -16,17 +15,18 @@ function gm_control_display_sheet() {
 	set_events = false;
 	if(gm_control_sheet.length > 0) {
 		for(count = 0; count < gm_control_sheet.length; count++) {
-			html += '<tr ref="' + count + '">';
+			html += '<tr class="dragrow" ref="' + count + '">';
 			html += '<td>' + gm_control_sheet[count].get_name() + '</td>';
 
 			html += '<td>' + gm_control_sheet[count].get_attribute('st') + ' / ' + gm_control_sheet[count].get_attribute('dx') + ' / ' + gm_control_sheet[count].get_attribute('iq') + ' / ' + gm_control_sheet[count].get_attribute('ht') + '</td>';
 			html += '<td>' + gm_control_sheet[count].get_secondary('will') + ' / ' + gm_control_sheet[count].get_secondary('per') + '</td>';
 			html += '<td>' + gm_control_sheet[count].get_secondary('speed') + '</td>';
 			html += '<td>' + gm_control_sheet[count].get_secondary('move') + '</td>';
-			html += '<td>2</td>';
+			html += '<td>' + gm_control_sheet[count].get_secondary('dr') + '</td>';
 			html += '<td>' + gm_control_sheet[count].get_secondary('curr_hp') + ' / ' + gm_control_sheet[count].get_secondary('hp') + '</td>';
-			html += '<td>0</td>';
-			html += '<td>';
+			html += '<td>' + gm_control_sheet[count].get_secondary('curr_fatigue') + ' / ' + gm_control_sheet[count].get_secondary('fatigue') + '</td>';
+			html += '<td>' + gm_control_sheet[count].get_secondary('reaction') + '</td>';
+			html += '<td class="text-center">';
 			html += ' <a href="#" ref="' + count + '" title="Edit This Entry" class="js-gm-control-line-edit"><span class="glyphicon glyphicon-edit"></span></a> ';
 			html += ' <a href="#" ref="' + count + '" title="Duplicate This Entry" class="js-gm-control-line-duplicate"><span class="glyphicon glyphicon-share"></span></a> ';
 			html += ' <a href="#" ref="' + count + '" title="Remove This Entry" class="js-gm-control-line-remove"><span class="glyphicon glyphicon-trash"></span></a> ';
@@ -50,7 +50,7 @@ function gm_control_display_sheet() {
 	$('.sorted_table').sortable({
 		containerSelector: 'table',
 		itemPath: '> tbody',
-		itemSelector: 'tr',
+		itemSelector: '.dragrow',
 		placeholder: '<tr class="placeholder" />',
 		onDrop: function  (item, container, _super) {
 			var field,
@@ -107,7 +107,7 @@ function gm_control_init_entry_form(character) {
 	}
 }
 
-function assignDataToChar(character) {
+function gm_control_assign_data_to_char(character) {
 	character.set_name( $(".js-char-field-name").val()  );
 
 	character.set_attribute("st", $(".js-char-field-st").val() );
@@ -132,14 +132,14 @@ function assignDataToChar(character) {
 function gm_control_show_add_line_dialog() {
 	gm_control_init_entry_form();
 	$(".js-gm-control-line-dialog-action-button").text("Add").button('refresh');
-	$(".js-gm-control-line-dialog-title").text("Adding Line");
+	$(".js-gm-control-line-dialog-title").text("Adding Entry");
 
 	$('.js-gm-control-line-dialog-action-button').unbind('click');
 	$('.js-gm-control-line-dialog-action-button').on("click", function(event) {
 		event.preventDefault();
 		// TODO: Add entry data to new character
 		newChar = new class_character();
-		newChar = assignDataToChar( newChar );
+		newChar = gm_control_assign_data_to_char( newChar );
 
 		// add to gm_control_sheet array
 		gm_control_sheet.push( newChar );
@@ -156,14 +156,14 @@ function gm_control_show_add_line_dialog() {
 function gm_control_show_edit_line_dialog(character, index) {
 	gm_control_init_entry_form(character);
 	$(".js-gm-control-line-dialog-action-button").val("Save").button('refresh');
-	$(".js-gm-control-line-dialog-title").text("Editing Line");
+	$(".js-gm-control-line-dialog-title").text("Editing Entry");
 
 	currentlyEditing = index;
 	$('.js-gm-control-line-dialog-action-button').unbind('click');
 	$('.js-gm-control-line-dialog-action-button').on("click", function(event) {
 		event.preventDefault();
 		// Update data to exiting character in gm_control_sheet
-		gm_control_sheet[currentlyEditing] = assignDataToChar( gm_control_sheet[currentlyEditing] );
+		gm_control_sheet[currentlyEditing] = gm_control_assign_data_to_char( gm_control_sheet[currentlyEditing] );
 		// Refresh Sheet
 		gm_control_display_sheet();
 		currentlyEditing = 0;
@@ -178,7 +178,7 @@ function gm_control_show_edit_line_dialog(character, index) {
 function gm_control_show_duplicate_line_dialog(character) {
 	gm_control_init_entry_form(character);
 	$(".js-gm-control-line-dialog-action-button").val("Add").button('refresh');
-	$(".js-gm-control-line-dialog-title").text("Duplicating Line");
+	$(".js-gm-control-line-dialog-title").text("Duplicating Entry");
 
 	$('.js-gm-control-line-dialog-action-button').unbind('click');
 	$('.js-gm-control-line-dialog-action-button').on("click", function(event) {
@@ -187,7 +187,7 @@ function gm_control_show_duplicate_line_dialog(character) {
 		newChar = new class_character();
 
 		// Add entry data to new character
-		newChar = assignDataToChar( newChar );
+		newChar = gm_control_assign_data_to_char( newChar );
 
 		// add to gm_control_sheet array
 		gm_control_sheet.push( newChar );
@@ -252,7 +252,7 @@ function gm_control_refresh_events() {
 		return false;
 	} );
 
-	// Line Item Controls
+	// Entry Item Controls
 	$('.js-gm-control-line-remove').unbind('click');
 	$('.js-gm-control-line-remove').click( function(event) {
 		event.preventDefault();

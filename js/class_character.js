@@ -17,14 +17,17 @@ function class_character() {
 		this.secondary.will = 10;
 		this.secondary.per = 10;
 		this.secondary.fatigue = 10;
+		this.secondary.curr_fatigue = 10;
 		this.secondary.hp = 10;
 		this.secondary.curr_hp = 10;
-		this.secondary.reaction = 10;
-
-		this.points = 0;
 
 		this.secondary.speed = 5;
 		this.secondary.move = 5;
+
+		this.secondary.reaction = 0;
+		this.secondary.dr = 0;
+
+		this.points = 0;
 	}
 
 	this.calc = calc;
@@ -50,7 +53,7 @@ function class_character() {
 	this.get_attribute = get_attribute;
 	function get_attribute(attr_name) {
 		debugConsole("get_attribute('" + attr_name + "') called");
-		if(this.attributes[attr_name])
+		if(typeof(this.attributes[attr_name]) != "undefined")
 			return this.attributes[attr_name];
 		return "(undefined)";
 	}
@@ -58,7 +61,7 @@ function class_character() {
 	this.get_secondary = get_secondary;
 	function get_secondary(attr_name) {
 		debugConsole("get_secondary('" + attr_name + "') called");
-		if(this.secondary[attr_name])
+		if(typeof(this.secondary[attr_name]) != "undefined")
 			return this.secondary[attr_name];
 		return "(undefined)";
 	}
