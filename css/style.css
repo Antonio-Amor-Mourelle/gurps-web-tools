@@ -173,6 +173,12 @@ legend {
 	margin-left: 0;
 }
 
+.sorted_table .placeholder {
+	background: #0c0;
+	width: 100%;
+	height: 1px;
+	z-index: 1000;
+}
 .sorted_table .placeholder:before {
 	position: absolute;
 	content: "";
@@ -180,9 +186,9 @@ legend {
 	height: 0;
 	margin-top: -5px;
 	left: -5px;
-	top: -4px;
+	top: -1px;
 	border: 5px solid transparent;
-	border-left-color: red;
+	border-left-color: #0c0;
 	border-right: none;
 }
 .js-mobile-details {
