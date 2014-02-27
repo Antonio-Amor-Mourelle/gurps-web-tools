@@ -1,8 +1,5 @@
 CACHE MANIFEST
 # rev 2014-02-26-04
-FALLBACK:
-NETWORK:
-CACHE:
 ./dice.html
 ./index.html
 ./gm_control.html
@@ -27,3 +24,8 @@ CACHE:
 ./js/localstorage.js
 ./js/gm_control.js
 ./js/class_character.js
+
+FALLBACK:
+
+NETWORK:
+
