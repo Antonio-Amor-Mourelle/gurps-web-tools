@@ -7,11 +7,12 @@ function gm_control_propogate_mooks() {
 		gm_control_sheet.push( new class_character());
 		gm_control_sheet[count].set_name("Long Name Mook #" + (count+1));
 	}
+	gm_control_display_sheet();
 }
 
 var gm_control_sheet_currently_selected = Array();
 
-function gm_control_export_json() {
+function gm_control_export_json(selected_only) {
 	export_object = Array();
 
 	for(count = 0; count < gm_control_sheet.length; count++) {
@@ -40,10 +41,18 @@ function gm_control_export_json() {
 				dr: gm_control_sheet[count].get_secondary('dr')
 			}
 		}
-		export_object.push(  export_item );
+
+		if( selected_only && $.inArray(count, gm_control_sheet_currently_selected) > -1 )
+			export_object.push(  export_item );
 	}
 	return JSON.stringify( export_object );
 }
+
+function gm_control_save_to_local_storage() {
+	debugConsole("gm_control_save_to_local_storage() called");
+	local_storage_save("gm_control_items", gm_control_export_json(true) );
+}
+
 
 function gm_control_import_json(import_string) {
 	debugConsole("gm_control_import_json() called");
