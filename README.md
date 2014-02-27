@@ -4,7 +4,7 @@
 [http://jdgwf.github.io/gurps-web-tools/](http://jdgwf.github.io/gurps-web-tools/)
 
 ###Overview
-This is a collection of javascript web applications for the GURPS pen and paper role playing system owned by Pinnacle Entertainment Group.
+This is a collection of javascript web applications for the GURPS pen and paper role playing system owned by [Steve Jackson Games](http://www.sjgames.com).
 
 Fully Functional Tools Include:
 
@@ -13,7 +13,7 @@ Fully Functional Tools Include:
 
 The roadmap for these tools include:
 
-* Character Creator 
+* Character Creator
 * Starship Creator
 * Mass Battles Assistant
 

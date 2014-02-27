@@ -185,7 +185,7 @@ function gm_control_display_sheet() {
 		});
 		$('.sorted_table').touchDraggable();
 
-		sessionStorage.current_sheet = gm_control_export_json();
+		localStorage.gm_control_current_sheet = gm_control_export_json();
 	} else {
 		$(".sorted_table").sortable("disable");
 	}
@@ -431,7 +431,7 @@ function gm_control_refresh_events() {
 $( document ).ready( function() {
 //	gm_control_propogate_mooks();
 	gm_control_display_sheet();
-	if( sessionStorage.current_sheet ) {
-		gm_control_import_json( sessionStorage.current_sheet );
+	if( localStorage.gm_control_current_sheet ) {
+		gm_control_import_json( localStorage.gm_control_current_sheet );
 	}
 });
