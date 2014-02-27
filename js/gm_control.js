@@ -1,12 +1,105 @@
 // gm_control.js
 var gm_control_sheet = new Array();
-var currentlyEditing = 0;
+var gm_control_currently_editing = 0;
 function gm_control_propogate_mooks() {
 	debugConsole("gm_control_propogate_mooks() called");
 	for(count = 0; count < 5; count++) {
 		gm_control_sheet.push( new class_character());
 		gm_control_sheet[count].set_name("Long Name Mook #" + (count+1));
 	}
+}
+
+var gm_control_sheet_currently_selected = Array();
+
+function gm_control_export_json() {
+	export_object = Array();
+
+	for(count = 0; count < gm_control_sheet.length; count++) {
+		export_item = {
+			name: gm_control_sheet[count].get_name(),
+
+			attributes: {
+				st: gm_control_sheet[count].get_attribute('st'),
+				dx: gm_control_sheet[count].get_attribute('dx'),
+				iq: gm_control_sheet[count].get_attribute('iq'),
+				ht: gm_control_sheet[count].get_attribute('ht')
+			},
+
+			secondary: {
+				will: gm_control_sheet[count].get_secondary('will'),
+				per: gm_control_sheet[count].get_secondary('per'),
+				fatigue: gm_control_sheet[count].get_secondary('fatigue'),
+				curr_fatigue: gm_control_sheet[count].get_secondary('curr_fatigue'),
+				hp: gm_control_sheet[count].get_secondary('hp'),
+				curr_hp: gm_control_sheet[count].get_secondary('curr_hp'),
+
+				speed: gm_control_sheet[count].get_secondary('speed'),
+				move: gm_control_sheet[count].get_secondary('move'),
+
+				reaction: gm_control_sheet[count].get_secondary('reaction'),
+				dr: gm_control_sheet[count].get_secondary('dr')
+			}
+		}
+		export_object.push(  export_item );
+	}
+	return JSON.stringify( export_object );
+}
+
+function gm_control_import_json(import_string) {
+	debugConsole("gm_control_import_json() called");
+	import_object = JSON.parse(import_string);
+	debugConsole("gm_control_import_json() - type is " + typeof(import_object));
+	if (typeof(import_object) == "object") {
+		debugConsole("gm_control_import_json() - import is an array");
+		for( import_count = 0; import_count < import_object.length; import_count++) {
+			imported_object = gm_control_import_object( import_object[import_count] );
+			gm_control_sheet.push( imported_object );
+		}
+	}
+	gm_control_display_sheet();
+}
+
+function gm_control_import_object( importing_object ) {
+	debugConsole("gm_control_import_object() called");
+	return_value = new class_character();
+
+	if( typeof(importing_object.name) != "undefined")
+		return_value.set_name( importing_object.name );
+
+	if( typeof(importing_object.attributes.st) != "undefined")
+		return_value.set_attribute( 'st', importing_object.attributes.st );
+	if( typeof(importing_object.attributes.dx) != "undefined")
+		return_value.set_attribute( 'dx', importing_object.attributes.dx );
+	if( typeof(importing_object.attributes.iq) != "undefined")
+		return_value.set_attribute( 'iq', importing_object.attributes.iq );
+	if( typeof(importing_object.attributes.ht) != "undefined")
+		return_value.set_attribute( 'ht', importing_object.attributes.ht );
+
+	if( typeof(importing_object.secondary.will) != "undefined")
+		return_value.set_secondary( 'will', importing_object.secondary.will );
+	if( typeof(importing_object.secondary.per) != "undefined")
+		return_value.set_secondary( 'per', importing_object.secondary.per );
+	if( typeof(importing_object.secondary.fatigue) != "undefined")
+		return_value.set_secondary( 'fatigue', importing_object.secondary.fatigue );
+	if( typeof(importing_object.secondary.curr_fatigue) != "undefined")
+		return_value.set_secondary( 'curr_fatigue', importing_object.secondary.curr_fatigue );
+
+	if( typeof(importing_object.secondary.hp) != "undefined")
+		return_value.set_secondary( 'hp', importing_object.secondary.hp );
+			if( typeof(importing_object.secondary.curr_hp) != "undefined")
+		return_value.set_secondary( 'curr_hp', importing_object.secondary.curr_hp );
+
+	if( typeof(importing_object.secondary.dr) != "undefined")
+		return_value.set_secondary( 'dr', importing_object.secondary.dr );
+	if( typeof(importing_object.secondary.reaction) != "undefined")
+		return_value.set_secondary( 'reaction', importing_object.secondary.reaction );
+
+	if( typeof(importing_object.secondary.move) != "undefined")
+		return_value.set_secondary( 'move', importing_object.secondary.move );
+	if( typeof(importing_object.secondary.speed) != "undefined")
+		return_value.set_secondary( 'speed', importing_object.secondary.speed );
+
+	return return_value;
 }
 
 function gm_control_display_sheet() {
@@ -16,6 +109,12 @@ function gm_control_display_sheet() {
 	if(gm_control_sheet.length > 0) {
 		for(count = 0; count < gm_control_sheet.length; count++) {
 			html += '<tr class="dragrow" ref="' + count + '">';
+			checked = '';
+			if( $.inArray(count, gm_control_sheet_currently_selected) > -1 ) {
+				checked = 'checked="checked" ';
+			}
+
+			html += '<td><input ' + checked + 'type="checkbox" ref="' + count + '" class="js-select-check" /></td>';
 			html += '<td>' + gm_control_sheet[count].get_name() + '</td>';
 
 			html += '<td>' + gm_control_sheet[count].get_attribute('st') + ' / ' + gm_control_sheet[count].get_attribute('dx') + ' / ' + gm_control_sheet[count].get_attribute('iq') + ' / ' + gm_control_sheet[count].get_attribute('ht') + '</td>';
@@ -38,33 +137,50 @@ function gm_control_display_sheet() {
 			set_events = true;
 		}
 	} else {
-		html += "<tr><td colspan='8'>There are no items in your control sheet</td></tr>"
+		html += "<tr><td colspan='10'>There are no items in your control sheet</td></tr>"
 	}
 
 	$(".js-gm-control-sheet-display-data").html( html );
 
-	if( set_events )
+	if( set_events ) {
 		gm_control_refresh_events();
 
-	//$(".js-gm-control-sheet-display-data").sortable();
-	$('.sorted_table').sortable({
-		containerSelector: 'table',
-		itemPath: '> tbody',
-		itemSelector: '.dragrow',
-		placeholder: '<tr class="placeholder" />',
-		onDrop: function  (item, container, _super) {
-			var field,
-			newIndex = item.index();
-			oldIndex = item.attr("ref");
+		//$(".js-gm-control-sheet-display-data").sortable();
+		$('.sorted_table').sortable({
+			containerSelector: 'table',
+			itemPath: '> tbody',
+			itemSelector: '.dragrow',
+			placeholder: '<tr class="placeholder" />',
+			onDrop: function  (item, container, _super) {
+				var field,
+				newIndex = item.index();
+				oldIndex = item.attr("ref");
 
-			var temp_item = gm_control_sheet[oldIndex];
-			gm_control_sheet[oldIndex] = gm_control_sheet[newIndex];
-			gm_control_sheet[newIndex] = temp_item;
-			temp_item = "";
-			gm_control_display_sheet();
-		}
-	});
-	$('.sorted_table').touchDraggable();
+				var temp_item = gm_control_sheet[oldIndex];
+				gm_control_sheet[oldIndex] = gm_control_sheet[newIndex];
+				gm_control_sheet[newIndex] = temp_item;
+
+				// now swap the oldIndex with the newIndex in the gm_control_sheet_currently_selected
+				for( select_count = 0; select_count < gm_control_sheet_currently_selected.length;select_count++) {
+					if( gm_control_sheet_currently_selected[select_count] / 1 == oldIndex / 1) {
+						gm_control_sheet_currently_selected[select_count] = newIndex / 1;
+					} else {
+						if( gm_control_sheet_currently_selected[select_count] / 1 == newIndex / 1)
+							gm_control_sheet_currently_selected[select_count] = oldIndex / 1;
+					}
+				}
+				temp_item = "";
+				gm_control_display_sheet();
+			}
+		});
+		$('.sorted_table').touchDraggable();
+
+		sessionStorage.current_sheet = gm_control_export_json();
+	} else {
+		$(".sorted_table").sortable("disable");
+	}
+
+
 }
 
 function gm_control_init_entry_form(character) {
@@ -106,6 +222,7 @@ function gm_control_init_entry_form(character) {
 		$(".js-char-field-curr_hp").val('10');
 	}
 }
+
 
 function gm_control_assign_data_to_char(character) {
 	character.set_name( $(".js-char-field-name").val()  );
@@ -158,15 +275,15 @@ function gm_control_show_edit_line_dialog(character, index) {
 	$(".js-gm-control-line-dialog-action-button").val("Save").button('refresh');
 	$(".js-gm-control-line-dialog-title").text("Editing Entry");
 
-	currentlyEditing = index;
+	gm_control_currently_editing = index;
 	$('.js-gm-control-line-dialog-action-button').unbind('click');
 	$('.js-gm-control-line-dialog-action-button').on("click", function(event) {
 		event.preventDefault();
 		// Update data to exiting character in gm_control_sheet
-		gm_control_sheet[currentlyEditing] = gm_control_assign_data_to_char( gm_control_sheet[currentlyEditing] );
+		gm_control_sheet[gm_control_currently_editing] = gm_control_assign_data_to_char( gm_control_sheet[gm_control_currently_editing] );
 		// Refresh Sheet
 		gm_control_display_sheet();
-		currentlyEditing = 0;
+		gm_control_currently_editing = 0;
 		$('.js-gm-control-line-dialog').modal('hide');
 		return false;
 	} );
@@ -276,10 +393,21 @@ function gm_control_refresh_events() {
 		return false;
 	} );
 
+	$('.js-select-check').unbind('change');
+	$(".js-select-check").change( function() {
+		gm_control_sheet_currently_selected = Array()
+		$(".js-select-check:checked").each( function() {
+			debugConsole("SELECTCHECK() called - " + $(this).attr('ref'));
+			gm_control_sheet_currently_selected.push( $(this).attr('ref') / 1);
+		});
+	});
+
 }
 
 $( document ).ready( function() {
-	gm_control_propogate_mooks();
+//	gm_control_propogate_mooks();
 	gm_control_display_sheet();
-
+	if( sessionStorage.current_sheet ) {
+		gm_control_import_json( sessionStorage.current_sheet );
+	}
 });
