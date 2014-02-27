@@ -1,6 +1,6 @@
 // gm_control.js
 var gm_control_sheet = new Array();
-
+var currentlyEditing = 0;
 function gm_control_propogate_mooks() {
 	debugConsole("gm_control_propogate_mooks() called");
 	for(count = 0; count < 5; count++) {
@@ -16,7 +16,7 @@ function gm_control_display_sheet() {
 	set_events = false;
 	if(gm_control_sheet.length > 0) {
 		for(count = 0; count < gm_control_sheet.length; count++) {
-			html += '<tr>';
+			html += '<tr ref="' + count + '">';
 			html += '<td>' + gm_control_sheet[count].get_name() + '</td>';
 
 			html += '<td>' + gm_control_sheet[count].get_attribute('st') + ' / ' + gm_control_sheet[count].get_attribute('dx') + ' / ' + gm_control_sheet[count].get_attribute('iq') + ' / ' + gm_control_sheet[count].get_attribute('ht') + '</td>';
@@ -45,6 +45,25 @@ function gm_control_display_sheet() {
 
 	if( set_events )
 		gm_control_refresh_events();
+
+	//$(".js-gm-control-sheet-display-data").sortable();
+	$('.sorted_table').sortable({
+		containerSelector: 'table',
+		itemPath: '> tbody',
+		itemSelector: 'tr',
+		placeholder: '<tr class="placeholder" />',
+		onDrop: function  (item, container, _super) {
+			var field,
+			newIndex = item.index();
+			oldIndex = item.attr("ref");
+
+			var temp_item = gm_control_sheet[oldIndex];
+			gm_control_sheet[oldIndex] = gm_control_sheet[newIndex];
+			gm_control_sheet[newIndex] = temp_item;
+			temp_item = "";
+			gm_control_display_sheet();
+		}
+	});
 }
 
 function gm_control_init_entry_form(character) {
@@ -138,12 +157,14 @@ function gm_control_show_edit_line_dialog(character, index) {
 	$(".js-gm-control-line-dialog-action-button").val("Save");
 
 	$('.js-gm-control-add-line').unbind('click');
+	currentlyEditing = index;
 	$('.js-gm-control-add-line').click( function(event) {
 		event.preventDefault();
 		// TODO: Update data to exiting character in gm_control_sheet
-		gm_control_sheet[index] = assignDataToChar(gm_control_sheet[index]);
+		gm_control_sheet[currentlyEditing] = assignDataToChar(gm_control_sheet[currentlyEditing]);
 		// Refresh Sheet
 		gm_control_display_sheet();
+		currentlyEditing = 0;
 		return false;
 	} );
 
@@ -252,4 +273,5 @@ function gm_control_refresh_events() {
 $( document ).ready( function() {
 	gm_control_propogate_mooks();
 	gm_control_display_sheet();
+
 });

@@ -21,6 +21,7 @@ CACHE:
 /js/dice.js
 /js/functions.js
 /js/jquery-1.10.2.min.js
+/js/jquery.sortable.js
 /js/localstorage.js
 /js/localstorage.js
 /js/gm_control.js

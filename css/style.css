@@ -115,3 +115,62 @@ legend {
 .color-blue {
 	color: #428bca;
 }
+
+
+.dragged {
+	position: absolute;
+	opacity: 0.5;
+	cursor: pointer;
+	z-index: 2000;
+	cursor: pointer;
+}
+
+.table-striped {
+
+}
+
+.table-striped tbody tr:nth-child(odd) td, .table-striped tbody tr:nth-child(odd) th {
+	background-color: #f9f9f9;
+
+}
+.table-bordered th, .table-bordered td {
+	border-left: 1px solid #dddddd;
+}
+.table-bordered {
+	border: 1px solid #dddddd;
+	border-collapse: separate;
+	border-left: 0;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+}
+
+.sorted_table .placeholder {
+	position: absolute;
+}
+.sorted_table tr {
+	position: relative;
+	cursor: move;
+}
+.sorted_table {
+	position: relative;
+	cursor: pointer;
+}
+
+.sorted_table a {
+	position: relative;
+	cursor: hand !important;
+}
+
+.sorted_table .placeholder:before {
+	position: absolute;
+	content: "";
+	width: 0;
+	height: 0;
+	margin-top: -5px;
+	left: -5px;
+	top: -4px;
+	border: 5px solid transparent;
+	border-left-color: red;
+	border-right: none;
+}
