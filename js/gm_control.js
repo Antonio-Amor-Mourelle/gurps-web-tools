@@ -86,23 +86,23 @@ function gm_control_init_entry_form(character) {
 		$(".js-char-field-hp").val( character.get_secondary('hp') );
 		$(".js-char-field-curr_hp").val( character.get_secondary('curr_hp') );
 	} else {
-		$(".js-char-field-name").val();
+		$(".js-char-field-name").val('');
 
-		$(".js-char-field-st").val();
-		$(".js-char-field-dx").val();
-		$(".js-char-field-iq").val();
-		$(".js-char-field-ht").val();
+		$(".js-char-field-st").val('10');
+		$(".js-char-field-dx").val('10');
+		$(".js-char-field-iq").val('10');
+		$(".js-char-field-ht").val('10');
 
-		$(".js-char-field-speed").val();
-		$(".js-char-field-move").val();
-		$(".js-char-field-will").val();
-		$(".js-char-field-per").val();
+		$(".js-char-field-speed").val('5');
+		$(".js-char-field-move").val('5');
+		$(".js-char-field-will").val('10');
+		$(".js-char-field-per").val('10');
 
-		$(".js-char-field-reaction").val();
+		$(".js-char-field-reaction").val('0');
 
-		$(".js-char-field-dr").val();
-		$(".js-char-field-hp").val();
-		$(".js-char-field-curr_hp").val();
+		$(".js-char-field-dr").val('0');
+		$(".js-char-field-hp").val('10');
+		$(".js-char-field-curr_hp").val('10');
 	}
 }
 
@@ -133,12 +133,11 @@ function gm_control_show_add_line_dialog() {
 	$(".js-gm-control-line-dialog-action-button").text("Add").button('refresh');
 
 	$('.js-gm-control-line-dialog-action-button').unbind('click');
-	$('.js-gm-control-line-dialog-action-button').click( function(event) {
+	$('.js-gm-control-line-dialog-action-button').on("click", function(event) {
 		event.preventDefault();
 		// TODO: Add entry data to new character
 		newChar = new class_character();
-
-		newChar = assignDataToChar(newChar);
+		newChar = assignDataToChar( newChar );
 
 		// add to gm_control_sheet array
 		gm_control_sheet.push( newChar );
@@ -154,17 +153,18 @@ function gm_control_show_add_line_dialog() {
 
 function gm_control_show_edit_line_dialog(character, index) {
 	gm_control_init_entry_form(character);
-	$(".js-gm-control-line-dialog-action-button").val("Save");
+	$(".js-gm-control-line-dialog-action-button").val("Save").button('refresh');
 
-	$('.js-gm-control-add-line').unbind('click');
 	currentlyEditing = index;
-	$('.js-gm-control-add-line').click( function(event) {
+	$('.js-gm-control-line-dialog-action-button').unbind('click');
+	$('.js-gm-control-line-dialog-action-button').on("click", function(event) {
 		event.preventDefault();
-		// TODO: Update data to exiting character in gm_control_sheet
-		gm_control_sheet[currentlyEditing] = assignDataToChar(gm_control_sheet[currentlyEditing]);
+		// Update data to exiting character in gm_control_sheet
+		gm_control_sheet[currentlyEditing] = assignDataToChar( gm_control_sheet[currentlyEditing] );
 		// Refresh Sheet
 		gm_control_display_sheet();
 		currentlyEditing = 0;
+		$('.js-gm-control-line-dialog').modal('hide');
 		return false;
 	} );
 
@@ -174,21 +174,21 @@ function gm_control_show_edit_line_dialog(character, index) {
 
 function gm_control_show_duplicate_line_dialog(character) {
 	gm_control_init_entry_form(character);
-	$(".js-gm-control-line-dialog-action-button").val("Add");
+	$(".js-gm-control-line-dialog-action-button").val("Add").button('refresh');
 
-	$('.js-gm-control-add-line').unbind('click');
-	$('.js-gm-control-add-line').click( function(event) {
+	$('.js-gm-control-line-dialog-action-button').unbind('click');
+	$('.js-gm-control-line-dialog-action-button').on("click", function(event) {
 		event.preventDefault();
 		newChar = new class_character();
-
 		// Add entry data to new character
-		gm_control_sheet.push( newChar );
+		newChar = assignDataToChar( newChar );
 
 		// add to gm_control_sheet array
 		gm_control_sheet.push( newChar );
 
 		// Refresh Sheet
 		gm_control_display_sheet();
+		$('.js-gm-control-line-dialog').modal('hide');
 		return false;
 	} );
 
@@ -264,7 +264,7 @@ function gm_control_refresh_events() {
 	$('.js-gm-control-line-edit').unbind('click');
 	$('.js-gm-control-line-edit').click( function(event) {
 		event.preventDefault();
-		gm_control_show_duplicate_line_dialog(gm_control_sheet[ $(this).attr("ref")], $(this).attr("ref"));
+		gm_control_show_edit_line_dialog(gm_control_sheet[ $(this).attr("ref")], $(this).attr("ref"));
 		return false;
 	} );
 
