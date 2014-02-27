@@ -1,29 +1,29 @@
 CACHE MANIFEST
-# rev 2014-02-26-04
-./dice.html
-./index.html
-./gm_control.html
-./chargen.html
+# rev 2014022605
+http://jdgwf.github.io/gurps-web-tools/dice.html
+http://jdgwf.github.io/gurps-web-tools/index.html
+http://jdgwf.github.io/gurps-web-tools/gm_control.html
+http://jdgwf.github.io/gurps-web-tools/chargen.html
 
-./css/bootstrap.min.css
-./css/style.css
+http://jdgwf.github.io/gurps-web-tools/css/bootstrap.min.css
+http://jdgwf.github.io/gurps-web-tools/css/style.css
 
-./fonts/glyphicons-halflings-regular.eot
-./fonts/glyphicons-halflings-regular.svg
-./fonts/glyphicons-halflings-regular.ttf
-./fonts/glyphicons-halflings-regular.woff
+http://jdgwf.github.io/gurps-web-tools/fonts/glyphicons-halflings-regular.eot
+http://jdgwf.github.io/gurps-web-tools/fonts/glyphicons-halflings-regular.svg
+http://jdgwf.github.io/gurps-web-tools/fonts/glyphicons-halflings-regular.ttf
+http://jdgwf.github.io/gurps-web-tools/fonts/glyphicons-halflings-regular.woff
 
-./js/background.js
-./js/bootstrap.min.js
-./js/dice.js
-./js/functions.js
-./js/jquery-1.10.2.min.js
-./js/jquery.sortable.js
-./js/jquery.touch-punch.min.js
-./js/localstorage.js
-./js/localstorage.js
-./js/gm_control.js
-./js/class_character.js
+http://jdgwf.github.io/gurps-web-tools/js/background.js
+http://jdgwf.github.io/gurps-web-tools/js/bootstrap.min.js
+http://jdgwf.github.io/gurps-web-tools/js/dice.js
+http://jdgwf.github.io/gurps-web-tools/js/functions.js
+http://jdgwf.github.io/gurps-web-tools/js/jquery-1.10.2.min.js
+http://jdgwf.github.io/gurps-web-tools/js/jquery.sortable.js
+http://jdgwf.github.io/gurps-web-tools/js/jquery.touch-punch.min.js
+http://jdgwf.github.io/gurps-web-tools/js/localstorage.js
+http://jdgwf.github.io/gurps-web-tools/js/localstorage.js
+http://jdgwf.github.io/gurps-web-tools/js/gm_control.js
+http://jdgwf.github.io/gurps-web-tools/js/class_character.js
 
 FALLBACK:
 
