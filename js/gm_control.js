@@ -64,6 +64,7 @@ function gm_control_display_sheet() {
 			gm_control_display_sheet();
 		}
 	});
+	$('.sorted_table').touchDraggable();
 }
 
 function gm_control_init_entry_form(character) {
@@ -131,6 +132,7 @@ function assignDataToChar(character) {
 function gm_control_show_add_line_dialog() {
 	gm_control_init_entry_form();
 	$(".js-gm-control-line-dialog-action-button").text("Add").button('refresh');
+	$(".js-gm-control-line-dialog-title").text("Adding Line");
 
 	$('.js-gm-control-line-dialog-action-button').unbind('click');
 	$('.js-gm-control-line-dialog-action-button').on("click", function(event) {
@@ -154,6 +156,7 @@ function gm_control_show_add_line_dialog() {
 function gm_control_show_edit_line_dialog(character, index) {
 	gm_control_init_entry_form(character);
 	$(".js-gm-control-line-dialog-action-button").val("Save").button('refresh');
+	$(".js-gm-control-line-dialog-title").text("Editing Line");
 
 	currentlyEditing = index;
 	$('.js-gm-control-line-dialog-action-button').unbind('click');
@@ -175,11 +178,14 @@ function gm_control_show_edit_line_dialog(character, index) {
 function gm_control_show_duplicate_line_dialog(character) {
 	gm_control_init_entry_form(character);
 	$(".js-gm-control-line-dialog-action-button").val("Add").button('refresh');
+	$(".js-gm-control-line-dialog-title").text("Duplicating Line");
 
 	$('.js-gm-control-line-dialog-action-button').unbind('click');
 	$('.js-gm-control-line-dialog-action-button').on("click", function(event) {
 		event.preventDefault();
+		// Create a new character object
 		newChar = new class_character();
+
 		// Add entry data to new character
 		newChar = assignDataToChar( newChar );
 
@@ -188,6 +194,8 @@ function gm_control_show_duplicate_line_dialog(character) {
 
 		// Refresh Sheet
 		gm_control_display_sheet();
+
+		// hide dialog
 		$('.js-gm-control-line-dialog').modal('hide');
 		return false;
 	} );
