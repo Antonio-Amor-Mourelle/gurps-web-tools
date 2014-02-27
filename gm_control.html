@@ -40,7 +40,7 @@
 					</div>
 
 					<div class="row">
-						<div class="col-xs-12">Attributes</div>
+						<div class="col-xs-12"><h5>Attributes</h5></div>
 					</div>
 					<div class="row">
 						<div class="col-xs-3"><label>ST: <input type="text" class="js-char-field-st" name="st" /></label></div>
@@ -50,7 +50,7 @@
 					</div>
 
 					<div class="row">
-						<div class="col-xs-12">Secondary</div>
+						<div class="col-xs-12"><h5>Secondary</h5></div>
 					</div>
 					<div class="row">
 						<div class="col-xs-3"><label>Speed: <input type="text" class="js-char-field-speed" name="speed" /></label></div>
@@ -59,15 +59,33 @@
 						<div class="col-xs-3"><label>Will: <input type="text" class="js-char-field-will" name="will" /></label></div>
 					</div>
 
+
 					<div class="row">
-						<div class="col-xs-12">Other</div>
+						<div class="col-xs-12"><h5>Hit Points</h5></div>
+					</div>
+
+					<div class="row">
+						<div class="col-xs-3"><label>Max HP: <input type="text" class="js-char-field-hp" name="hp" /></label></div>
+						<div class="col-xs-3"><label>Curr HP: <input type="text" class="js-char-field-curr_hp" name="curr_hp" /></label></div>
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12"><h5>Fatigue</h5></div>
+					</div>
+
+					<div class="row">
+						<div class="col-xs-3"><label>Max Fat: <input type="text" class="js-char-field-fatigue" name="fatigue" /></label></div>
+						<div class="col-xs-3"><label>Curr Fat: <input type="text" class="js-char-field-curr_fatigue" name="curr_fatigue" /></label></div>
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12"><h5>Other</h5></div>
 					</div>
 					<div class="row">
 						<div class="col-xs-3"><label>Reaction: <input type="text" class="js-char-field-reaction" name="reaction" /></label></div>
 						<div class="col-xs-3"><label>DR: <input type="text" class="js-char-field-dr" name="dr" /></label></div>
-						<div class="col-xs-3"><label>HP: <input type="text" class="js-char-field-hp" name="hp" /></label></div>
-						<div class="col-xs-3"><label>Curr HP: <input type="text" class="js-char-field-curr_hp" name="curr_hp" /></label></div>
 					</div>
+
 				</div>
 
 	      		<div class="modal-footer">
@@ -86,10 +104,13 @@
 			<div class="col-sm-12">
 				<a href="#" class="js-gm-control-new"><span class="glyphicon glyphicon-file" title="New Control"></span></a>
 				<a href="#" class="js-gm-control-add-line"><span class="glyphicon glyphicon-th-list" title="Add a New Entry"></span></a>
+				<a href="#" class="js-gm-control-trash"><span class="glyphicon glyphicon-trash" title="Remove Checked Items"></span></a>
 				<a href="#" class="js-gm-control-save"><span class="glyphicon glyphicon-save" title="Save"></span></a>
 				<a href="#" class="js-gm-control-load"><span class="glyphicon glyphicon-open" title="Load"></span></a>
 				<a href="#" class="js-gm-control-export"><span class="glyphicon glyphicon-export" title="Export"></span></a>
 				<a href="#" class="js-gm-control-import"><span class="glyphicon glyphicon-import" title="Import"></span></a>
+				<a href="#" class="js-gm-control-add-mooks"><span class="glyphicon glyphicon-user" title="Add Test Data"></span></a>
+
 			</div>
 		</div>
 	</div>
@@ -102,17 +123,17 @@
 			<table class="sorted_table table-striped">
 				<thead>
 					<tr>
-						<th><input type="checkbox" class="js-gm-control-check-all" /></th>
+						<th class="min-width text-right"><input type="checkbox" class="js-gm-control-check-all" /></th>
 						<th>Name</th>
-						<th>Attributes<br />ST / DX / IQ / HT</th>
-						<th>Will/Per</th>
+						<th class="hidden-xs">Attributes<br />ST / DX / IQ / HT</th>
+						<th class="hidden-xs">Will/Per</th>
 						<th>Spd</th>
 						<th>Mv</th>
 						<th>DR</th>
 						<th>HP<br />Cur/ Max</th>
 						<th>Fatigue<br />Cur/ Max</th>
-						<th>Rea</th>
-						<th>&nbsp;</th>
+						<th class="hidden-xs">Rea</th>
+						<th class="hidden-xs">&nbsp;</th>
 					</tr>
 				</thead>
 				<tbody class="js-gm-control-sheet-display-data">

@@ -147,19 +147,24 @@ legend {
 
 .sorted_table ,
 .sorted_table tr,
+.sorted_table td,
 .sorted_table th {
 	position: relative;
-	cursor: pointer;
 }
 
 .sorted_table .dragrow {
 	position: relative;
-	cursor: move;
+}
+.min-width {
+	width: 1%;
+}
+.drag-select {
+	cursor: move !important;
+	margin: 2px;
 }
 
 .sorted_table a {
 	position: relative;
-	cursor: hand;
 	font-size: 20px;
 	margin-left: 7px;
 }
@@ -179,4 +184,25 @@ legend {
 	border: 5px solid transparent;
 	border-left-color: red;
 	border-right: none;
+}
+.js-mobile-details {
+	position: absolute;
+	z-index: 100;
+	background: #ededed;
+	border: 1px solid #666;
+	border-radius: 5px;
+	width: 300px;
+	overflow: hidden;
+	margin: 5px 0 0 0;
+	padding: 3px 10px;
+}
+h5 {
+	margin: 0;
+	padding: 0;
+	border-bottom: 1px solid #333;
+	font-weight: bold;
+}
+.js-gm-control-line-view {
+	float: left;
+	margin: 0 10px 0 0;
 }

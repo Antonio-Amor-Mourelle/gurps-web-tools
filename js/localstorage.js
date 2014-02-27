@@ -1,12 +1,12 @@
 // Common localStorage and sessionStorage functions
+if( !localStorage.gm_control_current_sheet )
+	localStorage.gm_control_current_sheet = "[]";
 
-
-function local_storage_save(local_storage_var, json_to_save) {
+function local_storage_save(local_storage_var, json_to_save, overwrite) {
 	debugConsole("local_storage_save(" + local_storage_var + ", " + json_to_save+ ") called");
 
-	if( json_to_save && local_storage_var && json_to_save != "[]") {
+	if( (json_to_save && local_storage_var && json_to_save != "[]") || overwrite) {
 
-		obj_to_save = JSON.stringify( json_to_save );
 		storage_object = {
 			saved: new Date(),
 			data: json_to_save
@@ -18,8 +18,12 @@ function local_storage_save(local_storage_var, json_to_save) {
 		else
 			current_local_storage_obj = Array();
 
-		current_local_storage_obj = current_local_storage_obj.concat(storage_object);
+		if( overwrite )
+			current_local_storage_obj = Array();
 
+ 		current_local_storage_obj = current_local_storage_obj.concat(storage_object);
+
+		debugConsole(storage_object);
 		localStorage.setItem( local_storage_var, JSON.stringify(current_local_storage_obj) );
 		return true;
 	} else {
@@ -28,7 +32,7 @@ function local_storage_save(local_storage_var, json_to_save) {
 }
 
 function local_storage_retrieve(local_storage_var, index_to_retrieve) {
-	debugConsole("local_storage_save(" + local_storage_var + ", " + index_to_retrieve+ ") called");
+	debugConsole("local_storage_retrieve(" + local_storage_var + ", " + index_to_retrieve+ ") called");
 
 	if( index_to_retrieve > -1 && local_storage_var) {
 
@@ -38,8 +42,10 @@ function local_storage_retrieve(local_storage_var, index_to_retrieve) {
 		else
 			current_local_storage_obj = Array();
 
-		if( current_local_storage_obj[index_to_retrieve].data ) {
-			return JSON.parse( current_local_storage_obj[index_to_retrieve].data );
+		if( current_local_storage_obj[index_to_retrieve] ) {
+			if( current_local_storage_obj[index_to_retrieve].data ) {
+				return JSON.parse( current_local_storage_obj[index_to_retrieve].data );
+			}
 		}
 
 		return false;
