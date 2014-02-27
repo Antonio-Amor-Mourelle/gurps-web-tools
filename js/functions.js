@@ -1,4 +1,4 @@
-var showDebug = false;
+var showDebug = true;
 var alertFallback = false;
 function debugConsole(message) {
 	if(showDebug) {
@@ -27,7 +27,7 @@ $(".ios_app_click").click( function(event) {
 });
 
 $(".inactive_selection").click( function(event) {
-	createAlert("This section is not active yet.", "danger");
+	create_alert("This section is not active yet.", "danger");
     return false;
 });
 
@@ -63,7 +63,7 @@ function simplify_cost(input_price) {
 	}
 }
 
-function createAlert(messageText, alertClass) {
+function create_alert(messageText, alertClass) {
 	if( !alertClass )
 		alertClass = "info";
 	dismissButton = '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>';

@@ -14,10 +14,12 @@ table th, table td {
 	border-right: 1px solid #333;
 	border-bottom: 1px solid #333;
 	padding: 2px 5px;
+	white-space: nowrap;
 }
 table th {
 	background: #333;
 	color: #fff;
+	vertical-align: bottom;
 }
 label {
 	display: block;

@@ -25,6 +25,61 @@
 	</div>
 </div>
 
+<div class="js-gm-control-line-dialog modal fade">
+	<div class="container">
+		<div class="modal-dialog">
+	    	<div class="modal-content">
+	      		<div class="modal-header">
+					<h4 class="modal-title">Add Line</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-xs-12">
+							<label>Name: <input type="text" class="js-char-field-name" name="name" /></label>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12">Attributes</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-3"><label>ST: <input type="text" class="js-char-field-st" name="st" /></label></div>
+						<div class="col-xs-3"><label>DX: <input type="text" class="js-char-field-dx" name="dx" /></label></div>
+						<div class="col-xs-3"><label>IQ: <input type="text" class="js-char-field-iq" name="iq" /></label></div>
+						<div class="col-xs-3"><label>HT: <input type="text" class="js-char-field-ht" name="ht" /></label></div>
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12">Secondary</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-3"><label>Speed: <input type="text" class="js-char-field-speed" name="speed" /></label></div>
+						<div class="col-xs-3"><label>Move: <input type="text" class="js-char-field-move" name="move" /></label></div>
+						<div class="col-xs-3"><label>Per: <input type="text" class="js-char-field-per" name="per" /></label></div>
+						<div class="col-xs-3"><label>Will: <input type="text" class="js-char-field-will" name="will" /></label></div>
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12">Other</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-3"><label>Reaction: <input type="text" class="js-char-field-reaction" name="reaction" /></label></div>
+						<div class="col-xs-3"><label>DR: <input type="text" class="js-char-field-dr" name="dr" /></label></div>
+						<div class="col-xs-3"><label>HP: <input type="text" class="js-char-field-hp" name="hp" /></label></div>
+						<div class="col-xs-3"><label>Curr HP: <input type="text" class="js-char-field-curr_hp" name="curr_hp" /></label></div>
+					</div>
+				</div>
+
+	      		<div class="modal-footer">
+		      		<button type="button" class="btn btn-default" data-dismiss="modal" data-dismiss="modal">Cancel</button>
+	        		<button type="button" class="btn btn-primary js-gm-control-line-dialog-action-button" data-dismiss="modal">Save</button>
+	      		</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
 <div class="action-bar">
 	<div class="container">
 		<div class="row">
@@ -48,12 +103,13 @@
 				<thead>
 					<tr>
 						<th>Name</th>
-						<th>Reaction</th>
-						<th>ST / DX / IQ / HT</th>
+						<th>Attributes<br />ST / DX / IQ / HT</th>
 						<th>Will/Per</th>
-						<th>Base Speed/Move</th>
+						<th>Base<br />Speed</th>
+						<th>Move</th>
 						<th>DR</th>
-						<th>Curr/ Max HP</th>
+						<th>HP<br />Curr/ Max</th>
+						<th>React</th>
 						<th>&nbsp;</th>
 					</tr>
 				</thead>
@@ -67,7 +123,6 @@
 		</div>
 
 	</div>
-
 
 	<div class="row">
 		<div class="col-sm-12 footer">
