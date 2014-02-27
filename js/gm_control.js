@@ -105,7 +105,7 @@ function gm_control_import_object( importing_object ) {
 function gm_control_display_sheet() {
 	debugConsole("gm_control_display_sheet() called");
 	html = "";
-	set_events = false;
+	activate_sort_table = false;
 	if(gm_control_sheet.length > 0) {
 		for(count = 0; count < gm_control_sheet.length; count++) {
 			html += '<tr class="dragrow" ref="' + count + '">';
@@ -134,7 +134,7 @@ function gm_control_display_sheet() {
 
 			html += '</td>';
 			html += '</tr>';
-			set_events = true;
+			activate_sort_table = true;
 		}
 	} else {
 		html += "<tr><td colspan='11'>There are no items in your control sheet</td></tr>"
@@ -142,8 +142,9 @@ function gm_control_display_sheet() {
 
 	$(".js-gm-control-sheet-display-data").html( html );
 
-	if( set_events ) {
-		gm_control_refresh_events();
+	gm_control_refresh_events();
+	if( activate_sort_table ) {
+
 
 		//$(".js-gm-control-sheet-display-data").sortable();
 		$('.sorted_table').sortable({
