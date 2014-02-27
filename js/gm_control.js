@@ -412,6 +412,20 @@ function gm_control_refresh_events() {
 		});
 	});
 
+	$(".js-gm-control-check-all").unbind('change');
+	$(".js-gm-control-check-all").change( function() {
+		if( $(".js-gm-control-check-all").is(":checked") )
+			$(".js-select-check").prop('checked',true);
+		else
+			$(".js-select-check").prop('checked',false);
+
+		gm_control_sheet_currently_selected = Array()
+		$(".js-select-check:checked").each( function() {
+			debugConsole("SELECTCHECK() called - " + $(this).attr('ref'));
+			gm_control_sheet_currently_selected.push( $(this).attr('ref') / 1);
+		});
+	} );
+
 }
 
 $( document ).ready( function() {
