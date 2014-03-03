@@ -9,17 +9,25 @@ table {
 	width: 100%;
 	border-top: 1px solid #333;
 	border-left: 1px solid #333;
+	font-size: 14px;
 }
 table th, table td {
 	border-right: 1px solid #333;
 	border-bottom: 1px solid #333;
 	padding: 2px 5px;
 	white-space: nowrap;
+	font-size: 14px;
 }
+
+table th a, table td a{
+	font-size: 14px !important;
+}
+
 table th {
 	background: #333;
 	color: #fff;
 	vertical-align: bottom;
+	font-size: 14px;
 }
 label {
 	display: block;
@@ -162,6 +170,7 @@ legend {
 .js-select-check {
 	margin: 0 0 0 5px !important;
 }
+
 .drag-select {
 	cursor: move !important;
 	padding: 0;
@@ -231,3 +240,4 @@ h5 {
 	float: left;
 	margin: 0 10px 0 0;
 }
+

@@ -21,25 +21,25 @@ function gm_control_export_json(selected_only) {
 			name: gm_control_sheet[count].get_name(),
 
 			attributes: {
-				st: gm_control_sheet[count].get_attribute('st'),
-				dx: gm_control_sheet[count].get_attribute('dx'),
-				iq: gm_control_sheet[count].get_attribute('iq'),
-				ht: gm_control_sheet[count].get_attribute('ht')
+				st: gm_control_sheet[count].get_attribute('st') / 1,
+				dx: gm_control_sheet[count].get_attribute('dx') / 1,
+				iq: gm_control_sheet[count].get_attribute('iq') / 1,
+				ht: gm_control_sheet[count].get_attribute('ht') / 1
 			},
 
 			secondary: {
-				will: gm_control_sheet[count].get_secondary('will'),
-				per: gm_control_sheet[count].get_secondary('per'),
-				fatigue: gm_control_sheet[count].get_secondary('fatigue'),
-				curr_fatigue: gm_control_sheet[count].get_secondary('curr_fatigue'),
-				hp: gm_control_sheet[count].get_secondary('hp'),
-				curr_hp: gm_control_sheet[count].get_secondary('curr_hp'),
+				will: gm_control_sheet[count].get_secondary('will') / 1,
+				per: gm_control_sheet[count].get_secondary('per') / 1,
+				fatigue: gm_control_sheet[count].get_secondary('fatigue') / 1,
+				curr_fatigue: gm_control_sheet[count].get_secondary('curr_fatigue') / 1,
+				hp: gm_control_sheet[count].get_secondary('hp') / 1,
+				curr_hp: gm_control_sheet[count].get_secondary('curr_hp') / 1,
 
-				speed: gm_control_sheet[count].get_secondary('speed'),
-				move: gm_control_sheet[count].get_secondary('move'),
+				speed: gm_control_sheet[count].get_secondary('speed') / 1,
+				move: gm_control_sheet[count].get_secondary('move') / 1,
 
-				reaction: gm_control_sheet[count].get_secondary('reaction'),
-				dr: gm_control_sheet[count].get_secondary('dr')
+				reaction: gm_control_sheet[count].get_secondary('reaction') / 1,
+				dr: gm_control_sheet[count].get_secondary('dr') / 1
 			}
 		}
 
@@ -85,37 +85,37 @@ function gm_control_import_object( importing_object ) {
 		return_value.set_name( importing_object.name );
 
 	if( typeof(importing_object.attributes.st) != "undefined")
-		return_value.set_attribute( 'st', importing_object.attributes.st );
+		return_value.set_attribute( 'st', importing_object.attributes.st / 1 );
 	if( typeof(importing_object.attributes.dx) != "undefined")
-		return_value.set_attribute( 'dx', importing_object.attributes.dx );
+		return_value.set_attribute( 'dx', importing_object.attributes.dx / 1 );
 	if( typeof(importing_object.attributes.iq) != "undefined")
-		return_value.set_attribute( 'iq', importing_object.attributes.iq );
+		return_value.set_attribute( 'iq', importing_object.attributes.iq / 1 );
 	if( typeof(importing_object.attributes.ht) != "undefined")
-		return_value.set_attribute( 'ht', importing_object.attributes.ht );
+		return_value.set_attribute( 'ht', importing_object.attributes.ht / 1 );
 
 	if( typeof(importing_object.secondary.will) != "undefined")
-		return_value.set_secondary( 'will', importing_object.secondary.will );
+		return_value.set_secondary( 'will', importing_object.secondary.will / 1 );
 	if( typeof(importing_object.secondary.per) != "undefined")
-		return_value.set_secondary( 'per', importing_object.secondary.per );
+		return_value.set_secondary( 'per', importing_object.secondary.per / 1 );
 	if( typeof(importing_object.secondary.fatigue) != "undefined")
-		return_value.set_secondary( 'fatigue', importing_object.secondary.fatigue );
+		return_value.set_secondary( 'fatigue', importing_object.secondary.fatigue / 1 );
 	if( typeof(importing_object.secondary.curr_fatigue) != "undefined")
-		return_value.set_secondary( 'curr_fatigue', importing_object.secondary.curr_fatigue );
+		return_value.set_secondary( 'curr_fatigue', importing_object.secondary.curr_fatigue / 1 );
 
 	if( typeof(importing_object.secondary.hp) != "undefined")
-		return_value.set_secondary( 'hp', importing_object.secondary.hp );
+		return_value.set_secondary( 'hp', importing_object.secondary.hp / 1 );
 			if( typeof(importing_object.secondary.curr_hp) != "undefined")
-		return_value.set_secondary( 'curr_hp', importing_object.secondary.curr_hp );
+		return_value.set_secondary( 'curr_hp', importing_object.secondary.curr_hp / 1 );
 
 	if( typeof(importing_object.secondary.dr) != "undefined")
-		return_value.set_secondary( 'dr', importing_object.secondary.dr );
+		return_value.set_secondary( 'dr', importing_object.secondary.dr / 1 );
 	if( typeof(importing_object.secondary.reaction) != "undefined")
-		return_value.set_secondary( 'reaction', importing_object.secondary.reaction );
+		return_value.set_secondary( 'reaction', importing_object.secondary.reaction / 1 );
 
 	if( typeof(importing_object.secondary.move) != "undefined")
-		return_value.set_secondary( 'move', importing_object.secondary.move );
+		return_value.set_secondary( 'move', importing_object.secondary.move / 1 );
 	if( typeof(importing_object.secondary.speed) != "undefined")
-		return_value.set_secondary( 'speed', importing_object.secondary.speed );
+		return_value.set_secondary( 'speed', importing_object.secondary.speed / 1 );
 
 	return return_value;
 }
@@ -223,6 +223,7 @@ function gm_control_display_sheet() {
 }
 
 function gm_control_init_entry_form(character) {
+	debugConsole("gm_control_init_entry_form() called");
 	if(character) {
 		$(".js-char-field-name").val( character.get_name() );
 
@@ -259,50 +260,114 @@ function gm_control_init_entry_form(character) {
 		$(".js-char-field-dr").val('0');
 		$(".js-char-field-hp").val('10');
 		$(".js-char-field-curr_hp").val('10');
+
+		$(".js-char-field-fatigue").val('10');
+		$(".js-char-field-curr_fatigue").val('10');
 	}
+
+	$(".js-char-field-st").unbind("keyup");
+	$(".js-char-field-st").keyup( function() {
+			gm_control_update_edit_char()
+		}
+	);
+
+	$(".js-char-field-dx").unbind("keyup");
+	$(".js-char-field-dx").keyup( function() {
+			gm_control_update_edit_char()
+		}
+	);
+
+	$(".js-char-field-iq").unbind("keyup");
+	$(".js-char-field-iq").keyup( function() {
+			gm_control_update_edit_char()
+		}
+	);
+
+	$(".js-char-field-ht").unbind("keyup");
+	$(".js-char-field-ht").keyup( function() {
+			gm_control_update_edit_char()
+		}
+	);
 }
 
+function gm_control_update_edit_char() {
+	debugConsole("gm_control_update_edit_char() called");
+	new_speed = ( $(".js-char-field-ht").val() / 1+ $(".js-char-field-st").val() / 1 ) / 4;
+	$(".js-char-field-speed").val( new_speed );
+	$(".js-char-field-move").val( Math.floor(new_speed) );
+	$(".js-char-field-will").val( $(".js-char-field-iq").val() );
+	$(".js-char-field-per").val( $(".js-char-field-iq").val() );
+
+	$(".js-char-field-hp").val( $(".js-char-field-st").val() );
+	$(".js-char-field-curr_hp").val( $(".js-char-field-st").val() );
+
+	$(".js-char-field-fatigue").val( $(".js-char-field-ht").val() );
+	$(".js-char-field-curr_fatigue").val( $(".js-char-field-ht").val() );
+}
 
 function gm_control_assign_data_to_char(character) {
+	debugConsole("gm_control_assign_data_to_char() called");
 	character.set_name( $(".js-char-field-name").val()  );
 
-	character.set_attribute("st", $(".js-char-field-st").val() );
-	character.set_attribute("dx", $(".js-char-field-dx").val() );
-	character.set_attribute("iq", $(".js-char-field-iq").val() );
-	character.set_attribute("ht", $(".js-char-field-ht").val() );
+	character.set_attribute("st", $(".js-char-field-st").val() / 1 );
+	character.set_attribute("dx", $(".js-char-field-dx").val() / 1 );
+	character.set_attribute("iq", $(".js-char-field-iq").val() / 1 );
+	character.set_attribute("ht", $(".js-char-field-ht").val() / 1 );
 
-	character.set_secondary("speed", $(".js-char-field-speed").val() );
-	character.set_secondary("move", $(".js-char-field-move").val() );
-	character.set_secondary("will", $(".js-char-field-will").val() );
-	character.set_secondary("per", $(".js-char-field-per").val() );
+	character.set_secondary("speed", $(".js-char-field-speed").val() / 1 );
+	character.set_secondary("move", $(".js-char-field-move").val() / 1 );
+	character.set_secondary("will", $(".js-char-field-will").val() / 1 );
+	character.set_secondary("per", $(".js-char-field-per").val() / 1 );
 
-	character.set_secondary("reaction", $(".js-char-field-reaction").val() );
+	character.set_secondary("reaction", $(".js-char-field-reaction").val() / 1 );
 
-	character.set_secondary("dr", $(".js-char-field-dr").val() );
-	character.set_secondary("hp", $(".js-char-field-hp").val() );
-	character.set_secondary("curr_hp", $(".js-char-field-curr_hp").val() );
+	character.set_secondary("dr", $(".js-char-field-dr").val() / 1 );
+	character.set_secondary("hp", $(".js-char-field-hp").val() / 1 );
+	character.set_secondary("curr_hp", $(".js-char-field-curr_hp").val() / 1 );
 
-	character.set_secondary("fatigue", $(".js-char-field-fatigue").val() );
-	character.set_secondary("curr_fatigue", $(".js-char-field-curr_fatigue").val() );
+	character.set_secondary("fatigue", $(".js-char-field-fatigue").val() / 1 );
+	character.set_secondary("curr_fatigue", $(".js-char-field-curr_fatigue").val() / 1 );
 
 
 	return character;
 }
 
 function gm_control_show_add_line_dialog() {
+	debugConsole("gm_control_show_add_line_dialog() called");
 	gm_control_init_entry_form();
 	$(".js-gm-control-line-dialog-action-button").text("Add").button('refresh');
 	$(".js-gm-control-line-dialog-title").text("Adding Entry");
+	$(".js-area-add-more").show();
 
 	$('.js-gm-control-line-dialog-action-button').unbind('click');
 	$('.js-gm-control-line-dialog-action-button').on("click", function(event) {
 		event.preventDefault();
 		// TODO: Add entry data to new character
-		newChar = new class_character();
-		newChar = gm_control_assign_data_to_char( newChar );
+		number_to_add = $(".js-char-field-add-more").val();
 
-		// add to gm_control_sheet array
-		gm_control_sheet.push( newChar );
+		if(number_to_add > 1) {
+			for( add_count = 0; add_count < number_to_add; add_count++) {
+				new_name = $(".js-char-field-name").val() + " #" + (add_count + 1 );
+
+				// Create a new character object
+				newChar = new class_character();
+
+				// Add entry data to new character
+				newChar = gm_control_assign_data_to_char( newChar );
+
+				newChar.set_name( new_name );
+				gm_control_sheet.push( newChar );
+			}
+		} else {
+			// Create a new character object
+			newChar = new class_character();
+
+			// Add entry data to new character
+			newChar = gm_control_assign_data_to_char( newChar );
+
+			// add to gm_control_sheet array
+			gm_control_sheet.push( newChar );
+		}
 
 		// Refresh Sheet
 		gm_control_display_sheet();
@@ -318,6 +383,7 @@ function gm_control_show_edit_line_dialog(character, index) {
 	$(".js-gm-control-line-dialog-action-button").val("Save").button('refresh');
 	$(".js-gm-control-line-dialog-title").text("Editing Entry");
 
+	$(".js-area-add-more").hide();
 	gm_control_currently_editing = index;
 	$('.js-gm-control-line-dialog-action-button').unbind('click');
 	$('.js-gm-control-line-dialog-action-button').on("click", function(event) {
@@ -339,18 +405,38 @@ function gm_control_show_duplicate_line_dialog(character) {
 	gm_control_init_entry_form(character);
 	$(".js-gm-control-line-dialog-action-button").val("Add").button('refresh');
 	$(".js-gm-control-line-dialog-title").text("Duplicating Entry");
+	$(".js-area-add-more").show();
+
 
 	$('.js-gm-control-line-dialog-action-button').unbind('click');
 	$('.js-gm-control-line-dialog-action-button').on("click", function(event) {
 		event.preventDefault();
-		// Create a new character object
-		newChar = new class_character();
 
-		// Add entry data to new character
-		newChar = gm_control_assign_data_to_char( newChar );
+		number_to_add = $(".js-char-field-add-more").val();
 
-		// add to gm_control_sheet array
-		gm_control_sheet.push( newChar );
+		if(number_to_add > 1) {
+			for( add_count = 0; add_count < number_to_add; add_count++) {
+				new_name = $(".js-char-field-name").val() + " #" + (add_count + 1 );
+
+				// Create a new character object
+				newChar = new class_character();
+
+				// Add entry data to new character
+				newChar = gm_control_assign_data_to_char( newChar );
+
+				newChar.set_name( new_name );
+				gm_control_sheet.push( newChar );
+			}
+		} else {
+			// Create a new character object
+			newChar = new class_character();
+
+			// Add entry data to new character
+			newChar = gm_control_assign_data_to_char( newChar );
+
+			// add to gm_control_sheet array
+			gm_control_sheet.push( newChar );
+		}
 
 		// Refresh Sheet
 		gm_control_display_sheet();
@@ -502,11 +588,76 @@ function gm_control_refresh_events() {
 		}
 	});
 
+
+	$(".js-gm-control-add-mooks").unbind('click');
+	$(".js-gm-control-add-mooks").click( function() {
+		debugConsole(".js-gm-control-add-mooks clicked");
+		event.preventDefault();
+		gm_control_propogate_mooks();
+	});
+
+	$(".js-gm-control-sort-by-name").unbind('click');
+	$(".js-gm-control-sort-by-name").click( function() {
+		debugConsole(".js-gm-control-sort-by-name clicked");
+		event.preventDefault();
+		gm_control_sort_by_name();
+	});
+
+	$(".js-gm-control-sort-by-base-speed").unbind('click');
+	$(".js-gm-control-sort-by-base-speed").click( function() {
+		debugConsole(".js-gm-control-sort-by-base-speed clicked");
+		event.preventDefault();
+		gm_control_sort_by_base_speed();
+
+	});
+
+
+}
+
+function sort_chars_by_name(a,b) {
+	return a.name > b.name;
+}
+
+function sort_chars_by_speed(a,b) {
+	if (a.secondary.speed < b.secondary.speed){
+		return -1;
+	} else {
+		if (a.secondary.speed > b.secondary.speed) {
+			return 1;
+		} else {
+			return a.name > b.name;
+
+		}
+	}
+}
+
+function sort_chars_by_speed_reverse(a,b) {
+
+	if (a.secondary.speed > b.secondary.speed){
+		return -1;
+	} else {
+		if (a.secondary.speed < b.secondary.speed) {
+			return 1;
+		} else {
+			return a.name > b.name;
+
+		}
+	}
+}
+
+function gm_control_sort_by_base_speed() {
+	debugConsole("gm_control_sort_by_base_speed called");
+	gm_control_sheet.sort( sort_chars_by_speed_reverse );
+	gm_control_display_sheet();
+}
+
+function gm_control_sort_by_name() {
+	debugConsole("gm_control_sort_by_name called");
+	gm_control_sheet.sort( sort_chars_by_name );
+	gm_control_display_sheet();
 }
 
 $( document ).ready( function() {
-//	gm_control_propogate_mooks();
-
 	gm_control_current_sheet_obj = local_storage_retrieve("gm_control_current_sheet", 0);
 	if( gm_control_current_sheet_obj ) {
 		gm_control_import_json( JSON.stringify( gm_control_current_sheet_obj ), 1 );

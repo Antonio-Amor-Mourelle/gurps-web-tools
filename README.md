@@ -10,6 +10,15 @@ Fully Functional Tools Include:
 
 * Dice Roller
 * GM Control Sheet (currently in development)
+	* TODO: Export to JSON
+	* TODO: Import from JSON
+	* TODO: Load dialog from localStorage
+	* TODO: Save dialog to localStorage
+	* TODO: Quick Alter of Curr HP and Curr Fatigue
+
+	* TODO: Combat Round Counter
+	* TODO: Current Member's Turn
+	* TODO: Fatigue Hit Notification
 
 The roadmap for these tools include:
 
