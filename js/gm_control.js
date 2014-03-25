@@ -1,5 +1,7 @@
 // gm_control.js
 var gm_control_sheet = new Array();
+var gm_control_current_turn = 0;
+var gm_control_current_combatatant = 0;
 var gm_control_currently_editing = 0;
 function gm_control_propogate_mooks() {
 	debugConsole("gm_control_propogate_mooks() called");
@@ -12,6 +14,93 @@ function gm_control_propogate_mooks() {
 }
 
 var gm_control_sheet_currently_selected = Array();
+
+function gm_control_start_combat() {
+	gm_control_current_turn = 1;
+	gm_control_current_combatatant = 0;
+	gm_control_sort_by_base_speed();
+	gm_control_update_turn_box();
+	$(".js-turn-controls").slideDown();
+}
+
+function gm_control_apply_damage(char_index, damage_amount) {
+	gm_control_sheet[char_index].secondary.hp -= damage_amount;
+	gm_control_sheet[char_index].shock_amount = damage_amount;
+	if( gm_control_sheet[char_index].shock_amount > 4)
+		gm_control_sheet[char_index].shock_amount = 4;
+	gm_control_display_sheet();
+}
+
+function gm_control_next_combatatant() {
+	gm_control_sheet[gm_control_current_combatatant].shock_amount = 0;
+
+	gm_control_current_combatatant++;
+	if(gm_control_current_combatatant >= gm_control_sheet.length) {
+		gm_control_current_combatatant = 0;
+		gm_control_current_turn++;
+	}
+	gm_control_update_turn_box();
+}
+
+function gm_control_stop_combat() {
+	$(".js-turn-controls").slideUp();
+	gm_control_current_turn = 0;
+	gm_control_update_turn_box();
+}
+
+function gm_control_update_turn_box() {
+	html = "<fieldset><legend>Combat Turn Control - Turn #" + gm_control_current_turn + "</legend>";
+	if(gm_control_current_combatatant > 0) {
+		html += '<a href="#" class="js-gm-control-go-to-beginning-turn"><span class="glyphicon glyphicon glyphicon-fast-backward" title="Go to start of turn"></span></a>';
+		html += '<a href="#" class="js-gm-control-go-to-previous-turn"><span class="glyphicon glyphicon glyphicon-backward" title="Start back a turn"></span></a>';
+	} else {
+		html += '<span class="glyphicon glyphicon glyphicon-fast-backward" title="Start Combat Session">';
+		html += '<span class="glyphicon glyphicon glyphicon-backward" title="Start Combat Session">';
+	}
+	html += '<a href="#" class="js-gm-control-stop-combat"><span class="glyphicon glyphicon glyphicon-stop" title="Stop Combat Session"></span></a>';
+	html += '<a href="#" class="js-gm-control-go-to-next-turn"><span class="glyphicon glyphicon glyphicon-forward" title="Go to next turn"></span></a>';
+	html += '</fieldset>';
+
+	$(".js-turn-controls").html( html );
+
+	$(".js-gm-control-go-to-beginning-turn").unbind('click');
+	$(".js-gm-control-go-to-beginning-turn").click( function() {
+		debugConsole(".js-gm-control-go-to-beginning-turn clicked");
+		event.preventDefault();
+		// TODO
+		gm_control_current_combatatant = 0;
+		gm_control_update_turn_box();
+	});
+
+	$(".js-gm-control-go-to-previous-turn").unbind('click');
+	$(".js-gm-control-go-to-previous-turn").click( function() {
+		debugConsole(".js-gm-control-go-to-previous-turn clicked");
+		event.preventDefault();
+		// TODO
+		gm_control_update_turn_box();
+	});
+
+	$(".js-gm-control-stop-combat").unbind('click');
+	$(".js-gm-control-stop-combat").click( function() {
+		debugConsole(".js-gm-control-stop-combat clicked");
+		event.preventDefault();
+		// TODO
+		gm_control_stop_combat();
+	});
+
+	$(".js-gm-control-go-to-next-turn").unbind('click');
+	$(".js-gm-control-go-to-next-turn").click( function() {
+		debugConsole(".js-gm-control-go-to-next-turn clicked");
+		event.preventDefault();
+		gm_control_next_combatatant();
+		gm_control_update_turn_box();
+
+	});
+
+	gm_control_display_sheet();
+}
+
+
 
 function gm_control_export_json(selected_only) {
 	export_object = Array();
@@ -127,7 +216,10 @@ function gm_control_display_sheet() {
 	local_storage_save( "gm_control_current_sheet" , gm_control_export_json(), true );
 	if(gm_control_sheet.length > 0) {
 		for(count = 0; count < gm_control_sheet.length; count++) {
-			html += '<tr class="dragrow" ref="' + count + '">';
+			current_combatatant = "";
+			if( gm_control_current_turn > 0 && gm_control_current_combatatant == count)
+				current_combatatant = " current-combatatant";
+			html += '<tr class="dragrow' + current_combatatant + '" ref="' + count + '">';
 			checked = '';
 			if( $.inArray(count, gm_control_sheet_currently_selected) > -1 ) {
 				checked = 'checked="checked" ';
@@ -136,6 +228,8 @@ function gm_control_display_sheet() {
 			html += '<td class="text-right"><span class="glyphicon glyphicon-move drag-select"></span><input ' + checked + 'type="checkbox" ref="' + count + '" class="js-select-check" /></td>';
 			html += '<td>';
 			html += '<a href="#" ref="' + count + '" title="View This Entry" class="js-gm-control-line-view hidden-sm hidden-md hidden-lg hidden-xl"><span class="glyphicon glyphicon-eye-open"></span></a> ';
+			if( gm_control_sheet[count].shock_amount )
+				html += "<span class='shock-damage' title='This character is in shock!'>-" + gm_control_sheet[count].shock_amount + "</span>";
 			html += gm_control_sheet[count].get_name();
 			// TODO Small Screen Dropdown/Controls
 			html += '<div class="js-mobile-details js-mobile-details-' + count + '" style="display:none">';
@@ -152,7 +246,10 @@ function gm_control_display_sheet() {
 
 			html += '<td class="hidden-xs">' + gm_control_sheet[count].get_attribute('st') + ' / ' + gm_control_sheet[count].get_attribute('dx') + ' / ' + gm_control_sheet[count].get_attribute('iq') + ' / ' + gm_control_sheet[count].get_attribute('ht') + '</td>';
 			html += '<td class="hidden-xs">' + gm_control_sheet[count].get_secondary('will') + ' / ' + gm_control_sheet[count].get_secondary('per') + '</td>';
-			html += '<td>' + gm_control_sheet[count].get_secondary('speed') + '</td>';
+			html += '<td>' + gm_control_sheet[count].get_secondary('speed');
+			if(gm_control_sheet[count].random_roll)
+				html += ' <sub title="This is the random roll for ties">' + gm_control_sheet[count].random_roll + '</sub>';
+			html += ' </td>';
 			html += '<td>' + gm_control_sheet[count].get_secondary('move') + '</td>';
 			html += '<td>' + gm_control_sheet[count].get_secondary('dr') + '</td>';
 			html += '<td>' + gm_control_sheet[count].get_secondary('curr_hp') + ' / ' + gm_control_sheet[count].get_secondary('hp') + '</td>';
@@ -242,6 +339,9 @@ function gm_control_init_entry_form(character) {
 		$(".js-char-field-dr").val( character.get_secondary('dr') );
 		$(".js-char-field-hp").val( character.get_secondary('hp') );
 		$(".js-char-field-curr_hp").val( character.get_secondary('curr_hp') );
+
+		$(".js-char-field-fatigue").val( character.get_secondary('fatigue')  );
+		$(".js-char-field-curr_fatigue").val( character.get_secondary('curr_fatigue') );
 	} else {
 		$(".js-char-field-name").val('');
 
@@ -464,6 +564,14 @@ function gm_control_refresh_events() {
 		return false;
 	} );
 
+	$('.js-gm-control-start-combat').unbind('click');
+	$('.js-gm-control-start-combat').click( function(event) {
+		debugConsole(".js-gm-control-start-combat clicked");
+		event.preventDefault();
+		gm_control_start_combat();
+		return false;
+	} );
+
 	$('.js-gm-control-add-line').unbind('click');
 	$('.js-gm-control-add-line').click( function(event) {
 		debugConsole(".js-gm-control-add-line clicked");
@@ -639,20 +747,40 @@ function sort_chars_by_speed_reverse(a,b) {
 		if (a.secondary.speed < b.secondary.speed) {
 			return 1;
 		} else {
-			return a.name > b.name;
-
+			if (a.attributes.dx > b.attributes.dx){
+				return -1;
+			} else {
+				if (a.attributes.dx < b.attributes.dx){
+					return 1;
+				} else {
+					if (a.random_roll > b.random_roll){
+					} else {
+						if (a.random_roll < b.random_roll){
+							return 1;
+						} else {
+							return -1;
+						}
+					}
+				}
+			}
 		}
 	}
 }
 
 function gm_control_sort_by_base_speed() {
 	debugConsole("gm_control_sort_by_base_speed called");
+	for(gm_rand_count = 0; gm_rand_count < gm_control_sheet.length; gm_rand_count++) {
+		gm_control_sheet[gm_rand_count].random_roll = rollDice("1d6");
+	}
 	gm_control_sheet.sort( sort_chars_by_speed_reverse );
 	gm_control_display_sheet();
 }
 
 function gm_control_sort_by_name() {
 	debugConsole("gm_control_sort_by_name called");
+	for(gm_rand_count = 0; gm_rand_count < gm_control_sheet.length; gm_rand_count++) {
+		gm_control_sheet[gm_rand_count].random_roll = 0;
+	}
 	gm_control_sheet.sort( sort_chars_by_name );
 	gm_control_display_sheet();
 }

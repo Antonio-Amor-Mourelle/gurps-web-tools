@@ -29,6 +29,9 @@ table th {
 	vertical-align: bottom;
 	font-size: 14px;
 }
+table .current-combatatant td {
+	background: #aaf !important;
+}
 label {
 	display: block;
 }
@@ -134,7 +137,7 @@ legend {
 }
 
 .table-striped tbody tr:nth-child(odd) td, .table-striped tbody tr:nth-child(odd) th {
-	background-color: #f9f9f9;
+	background-color: #e9e9e9;
 
 }
 .table-bordered th, .table-bordered td {
@@ -241,3 +244,22 @@ h5 {
 	margin: 0 10px 0 0;
 }
 
+.js-turn-controls a .glyphicon,
+.js-turn-controls .glyphicon {
+	font-size: 24px;
+	margin: 0 10px;
+	padding: 0;
+}
+.js-turn-controls a {
+	margin: 0;
+	padding: 0;
+}
+.shock-damage {
+	font-weight: bold;
+	color: #f00;
+	margin-right: 5px;
+	border: 1px solid #f00;
+	border-radius: 5px;
+	width: 10px;
+	height: 10px;
+}

@@ -30,7 +30,7 @@
 		<div class="modal-dialog">
 	    	<div class="modal-content">
 	      		<div class="modal-header">
-					<h4 class="modal-title js-gm-control-line-dialog-titles">Add Entry</h4>
+					<h4 class="modal-title js-gm-control-line-dialog-title">XXXXing Entry</h4>
 				</div>
 				<div class="modal-body">
 					<div class="row">
@@ -137,7 +137,8 @@
 				<a href="#" class="js-gm-control-import"><span class="glyphicon glyphicon-import" title="Import"></span></a>
 				<a href="#" class="js-gm-control-add-mooks"><span class="glyphicon glyphicon-user" title="Add Test Data"></span></a>
 				<a href="#" class="js-gm-control-sort-by-name"><span class="glyphicon glyphicon-sort-by-alphabet" title="Sort by Name"></span></a>
-				<a href="#" class="js-gm-control-sort-by-base-speed"><span class="glyphicon glyphicon-sort-by-attributes-alt" title="Sort by Base Speed"></span></a>
+				<a href="#" class="js-gm-control-sort-by-base-speed"><span class="glyphicon glyphicon-sort-by-attributes-alt" title="Sort by Base Speed, then DX, then a random roll"></span></a>
+				<a href="#" class="js-gm-control-start-combat"><span class="glyphicon glyphicon glyphicon-play" title="Start Combat Session"></span></a>
 			</div>
 		</div>
 	</div>
@@ -147,14 +148,15 @@
 	<div class="js-alert-container"></div>
 	<div class="row">
 		<div class="col-sm-12">
+			<div class="js-turn-controls" style="display: none"></div>
 			<table class="sorted_table table-striped">
 				<thead>
 					<tr>
 						<th class="min-width text-right"><input type="checkbox" class="js-gm-control-check-all" /></th>
-						<th><a href="#" class="js-gm-control-sort-by-name">Name</a></th>
+						<th><a href="#" title="Sort by Name" class="js-gm-control-sort-by-name">Name</a></th>
 						<th class="hidden-xs">Attributes<br />ST / DX / IQ / HT</th>
 						<th class="hidden-xs">Will/Per</th>
-						<th><a href="#" class="js-gm-control-sort-by-base-speed">Spd</a></th>
+						<th><a href="#" title="Sort by Base Speed, then DX, then a random roll" class="js-gm-control-sort-by-base-speed">Spd</a></th>
 						<th>Mv</th>
 						<th>DR</th>
 						<th>HP<br />Cur/ Max</th>
@@ -194,6 +196,7 @@
 <script src="./js/functions.js?v=2014030301"></script>
 <script src="./js/localstorage.js?v=2014030301"></script>
 <script src="./js/class_character.js?v=2014030301"></script>
+<script src="./js/dice.js?v=2014030301"></script>
 <script src="./js/gm_control.js?v=2014030301"></script>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
