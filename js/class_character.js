@@ -25,7 +25,14 @@ function class_character() {
 		this.secondary.move = 5;
 
 		this.secondary.reaction = 0;
-		this.secondary.dr = 0;
+
+		this.attack_skill = 10;
+
+		this.defenses = {};
+		this.defenses.dr = 0;
+		this.defenses.dodge = 7;
+		this.defenses.parry = 7;
+		this.defenses.block = 7;
 
 		this.points = 0;
 	}
@@ -58,6 +65,16 @@ function class_character() {
 		return "(undefined)";
 	}
 
+	this.get_defense = get_defense;
+	function get_defense(defense_name) {
+		debugConsole("get_defense('" + defense_name + "') called");
+		if(typeof(this.defenses[defense_name]) != "undefined")
+			return this.defenses[defense_name];
+		return "(undefined)";
+	}
+
+
+
 	this.get_secondary = get_secondary;
 	function get_secondary(attr_name) {
 		debugConsole("get_secondary('" + attr_name + "') called");
@@ -69,18 +86,19 @@ function class_character() {
 	this.set_attribute = set_attribute;
 	function set_attribute(attr_name, new_value) {
 		debugConsole("set_attribute('" + attr_name + "', '" + new_value + "') called");
-		if(this.attributes[attr_name]) {
+		if(typeof(this.attributes[attr_name]) != "undefined") {
 			this.attributes[attr_name] = new_value;
 			this.calc();
 			return this.attributes[attr_name];
 		} else {
 			return false;
-		}	}
+		}
+	}
 
 	this.set_secondary = set_secondary;
 	function set_secondary(attr_name, new_value) {
 		debugConsole("set_secondary('" + attr_name + "', '" + new_value + "') called");
-		if(this.secondary[attr_name]) {
+		if(typeof(this.secondary[attr_name]) != "undefined") {
 			this.secondary[attr_name] = new_value;
 			this.calc();
 			return this.secondary[attr_name];
@@ -89,4 +107,25 @@ function class_character() {
 		}
 	}
 
+	this.set_defense = set_defense;
+	function set_defense(defense_name, new_value) {
+		debugConsole("set_defense('" + defense_name + "', '" + new_value + "') called");
+		if(typeof(this.defenses[defense_name]) != "undefined") {
+			this.defenses[defense_name] = new_value;
+			this.calc();
+			return this.defenses[defense_name];
+		} else {
+			return false;
+		}
+	}
+
+	this.set_attack_skill = set_attack_skill;
+	function set_attack_skill(new_value) {
+		this.attack_skill = new_value;
+	}
+
+	this.get_attack_skill = get_attack_skill;
+	function get_attack_skill() {
+		return this.attack_skill;
+	}
 }

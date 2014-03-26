@@ -24,10 +24,19 @@ function gm_control_start_combat() {
 }
 
 function gm_control_apply_damage(char_index, damage_amount) {
-	gm_control_sheet[char_index].secondary.hp -= damage_amount;
+	gm_control_sheet[char_index].secondary.curr_hp -= damage_amount;
 	gm_control_sheet[char_index].shock_amount = damage_amount;
 	if( gm_control_sheet[char_index].shock_amount > 4)
 		gm_control_sheet[char_index].shock_amount = 4;
+	gm_control_display_sheet();
+}
+
+
+function gm_control_apply_fatigue(char_index, fatigue_amount) {
+	gm_control_sheet[char_index].secondary.curr_fatigue -= fatigue_amount;
+//	gm_control_sheet[char_index].shock_amount = damage_amount;
+//	if( gm_control_sheet[char_index].shock_amount > 4)
+//		gm_control_sheet[char_index].shock_amount = 4;
 	gm_control_display_sheet();
 }
 
@@ -43,9 +52,10 @@ function gm_control_next_combatatant() {
 }
 
 function gm_control_stop_combat() {
+	for(gm_count = 0; gm_count < gm_control_sheet.length; gm_count++)
+		gm_control_sheet[gm_count].shock_amount = 0;
 	$(".js-turn-controls").slideUp();
 	gm_control_current_turn = 0;
-	gm_control_update_turn_box();
 }
 
 function gm_control_update_turn_box() {
@@ -67,7 +77,6 @@ function gm_control_update_turn_box() {
 	$(".js-gm-control-go-to-beginning-turn").click( function() {
 		debugConsole(".js-gm-control-go-to-beginning-turn clicked");
 		event.preventDefault();
-		// TODO
 		gm_control_current_combatatant = 0;
 		gm_control_update_turn_box();
 	});
@@ -84,7 +93,6 @@ function gm_control_update_turn_box() {
 	$(".js-gm-control-stop-combat").click( function() {
 		debugConsole(".js-gm-control-stop-combat clicked");
 		event.preventDefault();
-		// TODO
 		gm_control_stop_combat();
 	});
 
@@ -128,8 +136,16 @@ function gm_control_export_json(selected_only) {
 				move: gm_control_sheet[count].get_secondary('move') / 1,
 
 				reaction: gm_control_sheet[count].get_secondary('reaction') / 1,
-				dr: gm_control_sheet[count].get_secondary('dr') / 1
-			}
+
+			},
+
+			defenses: {
+				dodge: gm_control_sheet[count].get_defense('dodge') / 1,
+				parry: gm_control_sheet[count].get_defense('parry') / 1,
+				block: gm_control_sheet[count].get_defense('block') / 1,
+				dr: gm_control_sheet[count].get_defense('dr') / 1
+			},
+			attack_skill: gm_control_sheet[count].get_attack_skill()
 		}
 
 		if( selected_only ) {
@@ -150,20 +166,25 @@ function gm_control_save_to_local_storage() {
 
 function gm_control_import_json(import_string, overwrite) {
 	debugConsole("gm_control_import_json() called");
-	import_object = JSON.parse(import_string);
+	try {
+		import_object = JSON.parse(import_string);
 
-	if( overwrite )
-		gm_control_sheet = Array();
+		if( overwrite )
+			gm_control_sheet = Array();
 
-	debugConsole("gm_control_import_json() - type is " + typeof(import_object));
-	if (typeof(import_object) == "object") {
-		debugConsole("gm_control_import_json() - import is an array");
-		for( import_count = 0; import_count < import_object.length; import_count++) {
-			imported_object = gm_control_import_object( import_object[import_count] );
-			gm_control_sheet.push( imported_object );
+		debugConsole("gm_control_import_json() - type is " + typeof(import_object));
+		if (typeof(import_object) == "object") {
+			debugConsole("gm_control_import_json() - import is an array");
+			for( import_count = 0; import_count < import_object.length; import_count++) {
+				imported_object = gm_control_import_object( import_object[import_count] );
+				gm_control_sheet.push( imported_object );
+			}
 		}
+		gm_control_display_sheet();
 	}
-	gm_control_display_sheet();
+	catch( error ) {
+		create_alert("Could not import JSON. Please check the formatting!", "danger");
+	}
 }
 
 function gm_control_import_object( importing_object ) {
@@ -196,8 +217,7 @@ function gm_control_import_object( importing_object ) {
 			if( typeof(importing_object.secondary.curr_hp) != "undefined")
 		return_value.set_secondary( 'curr_hp', importing_object.secondary.curr_hp / 1 );
 
-	if( typeof(importing_object.secondary.dr) != "undefined")
-		return_value.set_secondary( 'dr', importing_object.secondary.dr / 1 );
+
 	if( typeof(importing_object.secondary.reaction) != "undefined")
 		return_value.set_secondary( 'reaction', importing_object.secondary.reaction / 1 );
 
@@ -205,6 +225,20 @@ function gm_control_import_object( importing_object ) {
 		return_value.set_secondary( 'move', importing_object.secondary.move / 1 );
 	if( typeof(importing_object.secondary.speed) != "undefined")
 		return_value.set_secondary( 'speed', importing_object.secondary.speed / 1 );
+
+	if( typeof(importing_object.attack_skill) != "undefined")
+		return_value.set_attack_skill( importing_object.attack_skill );
+
+	if( typeof(importing_object.defenses) != "undefined") {
+		if( typeof(importing_object.defenses.dodge) != "undefined")
+			return_value.set_defense( 'dodge', importing_object.defenses.dodge / 1 );
+		if( typeof(importing_object.defenses.parry) != "undefined")
+			return_value.set_defense( 'parry', importing_object.defenses.parry / 1 );
+		if( typeof(importing_object.defenses.block) != "undefined")
+			return_value.set_defense( 'block', importing_object.defenses.dodge / 1 );
+		if( typeof(importing_object.defenses.dr) != "undefined")
+			return_value.set_defense( 'dr', importing_object.defenses.dr / 1 );
+	}
 
 	return return_value;
 }
@@ -227,15 +261,15 @@ function gm_control_display_sheet() {
 
 			html += '<td class="text-right"><span class="glyphicon glyphicon-move drag-select"></span><input ' + checked + 'type="checkbox" ref="' + count + '" class="js-select-check" /></td>';
 			html += '<td>';
-			html += '<a href="#" ref="' + count + '" title="View This Entry" class="js-gm-control-line-view hidden-sm hidden-md hidden-lg hidden-xl"><span class="glyphicon glyphicon-eye-open"></span></a> ';
+			html += '<a href="#" ref="' + count + '" title="View This Entry" class="js-gm-control-line-view"><span class="glyphicon glyphicon-eye-open"></span></a> ';
 			if( gm_control_sheet[count].shock_amount )
 				html += "<span class='shock-damage' title='This character is in shock!'>-" + gm_control_sheet[count].shock_amount + "</span>";
 			html += gm_control_sheet[count].get_name();
-			// TODO Small Screen Dropdown/Controls
 			html += '<div class="js-mobile-details js-mobile-details-' + count + '" style="display:none">';
 			html += '<h5>Attributes</h5>';
 			html += '<div><strong>ST</strong>: ' + gm_control_sheet[count].get_attribute('st') + ' <strong>DX</strong>: ' + gm_control_sheet[count].get_attribute('dx') + ' <strong>IQ</strong>: ' + gm_control_sheet[count].get_attribute('iq') + ' <strong>HT</strong>: ' + gm_control_sheet[count].get_attribute('ht') + '</div>';
 			html += '<div>Reaction: ' + gm_control_sheet[count].get_secondary('reaction') + '</div>';
+			html += '<div>Will/Perception: ' + gm_control_sheet[count].get_secondary('will') + '/' +  gm_control_sheet[count].get_secondary('per')+ '</div>';
 			html += '<div class="text-right">';
 			html += ' <a href="#" ref="' + count + '" title="Edit This Entry" class="js-gm-control-line-edit"><span class="glyphicon glyphicon-edit"></span></a> ';
 			html += ' <a href="#" ref="' + count + '" title="Duplicate This Entry" class="js-gm-control-line-duplicate"><span class="glyphicon glyphicon-share"></span></a> ';
@@ -244,17 +278,19 @@ function gm_control_display_sheet() {
 			html += '</div>';
 			html += '</td>';
 
-			html += '<td class="hidden-xs">' + gm_control_sheet[count].get_attribute('st') + ' / ' + gm_control_sheet[count].get_attribute('dx') + ' / ' + gm_control_sheet[count].get_attribute('iq') + ' / ' + gm_control_sheet[count].get_attribute('ht') + '</td>';
-			html += '<td class="hidden-xs">' + gm_control_sheet[count].get_secondary('will') + ' / ' + gm_control_sheet[count].get_secondary('per') + '</td>';
+			//html += '<td class="hidden-xs">' + gm_control_sheet[count].get_attribute('st') + ' / ' + gm_control_sheet[count].get_attribute('dx') + ' / ' + gm_control_sheet[count].get_attribute('iq') + ' / ' + gm_control_sheet[count].get_attribute('ht') + '</td>';
+			//html += '<td class="hidden-xs">' + gm_control_sheet[count].get_secondary('will') + ' / ' + gm_control_sheet[count].get_secondary('per') + '</td>';
 			html += '<td>' + gm_control_sheet[count].get_secondary('speed');
 			if(gm_control_sheet[count].random_roll)
 				html += ' <sub title="This is the random roll for ties">' + gm_control_sheet[count].random_roll + '</sub>';
 			html += ' </td>';
 			html += '<td>' + gm_control_sheet[count].get_secondary('move') + '</td>';
-			html += '<td>' + gm_control_sheet[count].get_secondary('dr') + '</td>';
-			html += '<td>' + gm_control_sheet[count].get_secondary('curr_hp') + ' / ' + gm_control_sheet[count].get_secondary('hp') + '</td>';
-			html += '<td>' + gm_control_sheet[count].get_secondary('curr_fatigue') + ' / ' + gm_control_sheet[count].get_secondary('fatigue') + '</td>';
-			html += '<td class="hidden-xs">' + gm_control_sheet[count].get_secondary('reaction') + '</td>';
+			html += '<td>' + gm_control_sheet[count].get_defense('dodge') + ' / ' + gm_control_sheet[count].get_defense('block') + ' / ' + gm_control_sheet[count].get_defense('parry') + '</td>';
+			html += '<td>' + gm_control_sheet[count].get_defense('dr') + '</td>';
+			html += '<td><a href="#" ref="' + count + '" title="Apply Damage" class="js-gm-control-damage-edit">' + gm_control_sheet[count].get_secondary('curr_hp') + '</a> / ' + gm_control_sheet[count].get_secondary('hp') + '</td>';
+			html += '<td><a href="#" ref="' + count + '" title="Apply Fatigue" class="js-gm-control-fatigue-edit">' + gm_control_sheet[count].get_secondary('curr_fatigue') + '</a> / ' + gm_control_sheet[count].get_secondary('fatigue') + '</td>';
+			html += '<td>' + gm_control_sheet[count].get_attack_skill() + '</td>';
+		//	html += '<td class="hidden-xs">' + gm_control_sheet[count].get_secondary('reaction') + '</td>';
 			html += '<td class="hidden-xs text-center">';
 			html += ' <a href="#" ref="' + count + '" title="Edit This Entry" class="js-gm-control-line-edit"><span class="glyphicon glyphicon-edit"></span></a> ';
 			html += ' <a href="#" ref="' + count + '" title="Duplicate This Entry" class="js-gm-control-line-duplicate"><span class="glyphicon glyphicon-share"></span></a> ';
@@ -336,12 +372,19 @@ function gm_control_init_entry_form(character) {
 
 		$(".js-char-field-reaction").val( character.get_secondary('reaction') );
 
-		$(".js-char-field-dr").val( character.get_secondary('dr') );
+
 		$(".js-char-field-hp").val( character.get_secondary('hp') );
 		$(".js-char-field-curr_hp").val( character.get_secondary('curr_hp') );
 
 		$(".js-char-field-fatigue").val( character.get_secondary('fatigue')  );
 		$(".js-char-field-curr_fatigue").val( character.get_secondary('curr_fatigue') );
+
+		$(".js-char-field-dodge").val( character.get_defense('dodge') );
+		$(".js-char-field-parry").val( character.get_defense('parry') );
+		$(".js-char-field-block").val( character.get_defense('block') );
+		$(".js-char-field-dr").val( character.get_defense('dr') );
+
+		$(".js-char-field-attack_skill").val( character.get_attack_skill() );
 	} else {
 		$(".js-char-field-name").val('');
 
@@ -355,15 +398,34 @@ function gm_control_init_entry_form(character) {
 		$(".js-char-field-will").val('10');
 		$(".js-char-field-per").val('10');
 
+		$(".js-char-field-dodge").val('7');
+		$(".js-char-field-parry").val('0');
+		$(".js-char-field-block").val('-');
+		$(".js-char-field-dr").val('0');
+
+		$(".js-char-field-attack_skill").val('10');
+
 		$(".js-char-field-reaction").val('0');
 
-		$(".js-char-field-dr").val('0');
+
 		$(".js-char-field-hp").val('10');
 		$(".js-char-field-curr_hp").val('10');
 
 		$(".js-char-field-fatigue").val('10');
 		$(".js-char-field-curr_fatigue").val('10');
 	}
+
+	$(".js-char-field-move").unbind("keyup");
+	$(".js-char-field-move").keyup( function() {
+			gm_control_update_edit_char()
+		}
+	);
+
+	$(".js-char-field-speed").unbind("keyup");
+	$(".js-char-field-speed").keyup( function() {
+			gm_control_update_edit_char()
+		}
+	);
 
 	$(".js-char-field-st").unbind("keyup");
 	$(".js-char-field-st").keyup( function() {
@@ -403,6 +465,9 @@ function gm_control_update_edit_char() {
 
 	$(".js-char-field-fatigue").val( $(".js-char-field-ht").val() );
 	$(".js-char-field-curr_fatigue").val( $(".js-char-field-ht").val() );
+
+	$(".js-char-field-move").val( Math.floor($(".js-char-field-speed").val()  / 1) );
+	$(".js-char-field-dodge").val( $(".js-char-field-move").val() / 1  + 3  );
 }
 
 function gm_control_assign_data_to_char(character) {
@@ -419,15 +484,21 @@ function gm_control_assign_data_to_char(character) {
 	character.set_secondary("will", $(".js-char-field-will").val() / 1 );
 	character.set_secondary("per", $(".js-char-field-per").val() / 1 );
 
-	character.set_secondary("reaction", $(".js-char-field-reaction").val() / 1 );
+	character.set_secondary("reaction", $(".js-char-field-reaction").val() / 1);
 
-	character.set_secondary("dr", $(".js-char-field-dr").val() / 1 );
+
 	character.set_secondary("hp", $(".js-char-field-hp").val() / 1 );
 	character.set_secondary("curr_hp", $(".js-char-field-curr_hp").val() / 1 );
 
 	character.set_secondary("fatigue", $(".js-char-field-fatigue").val() / 1 );
 	character.set_secondary("curr_fatigue", $(".js-char-field-curr_fatigue").val() / 1 );
 
+	character.set_attack_skill( $(".js-char-field-attack_skill").val() );
+
+	character.set_defense("dr", $(".js-char-field-dr").val() / 1 );
+	character.set_defense("block", $(".js-char-field-block").val() / 1 );
+	character.set_defense("parry", $(".js-char-field-parry").val() / 1 );
+	character.set_defense("dodge", $(".js-char-field-dodge").val() / 1 );
 
 	return character;
 }
@@ -442,7 +513,7 @@ function gm_control_show_add_line_dialog() {
 	$('.js-gm-control-line-dialog-action-button').unbind('click');
 	$('.js-gm-control-line-dialog-action-button').on("click", function(event) {
 		event.preventDefault();
-		// TODO: Add entry data to new character
+
 		number_to_add = $(".js-char-field-add-more").val();
 
 		if(number_to_add > 1) {
@@ -490,6 +561,7 @@ function gm_control_show_edit_line_dialog(character, index) {
 		event.preventDefault();
 		// Update data to exiting character in gm_control_sheet
 		gm_control_sheet[gm_control_currently_editing] = gm_control_assign_data_to_char( gm_control_sheet[gm_control_currently_editing] );
+//		console.log( gm_control_sheet[gm_control_currently_editing] );
 		// Refresh Sheet
 		gm_control_display_sheet();
 		gm_control_currently_editing = 0;
@@ -499,6 +571,65 @@ function gm_control_show_edit_line_dialog(character, index) {
 
 
 	$('.js-gm-control-line-dialog').modal();
+}
+
+function gm_control_show_edit_damage_dialog(character, index) {
+	gm_control_init_entry_form(character);
+	$(".js-gm-control-damage-dialog-action-button").val("Save").button('refresh');
+	$(".js-gm-control-damage-dialog-title").text("Applying Damage");
+
+	options_html = "";
+	for(damagecount = 1; damagecount < 21; damagecount++)
+		options_html += '<option value="' + damagecount + '">' + damagecount+ ' points</option>';
+
+	$(".js-applied-damage-field").html( options_html );
+	$(".js-area-add-more").hide();
+	gm_control_currently_editing = index;
+	$('.js-gm-control-damage-dialog-action-button').unbind('click');
+	$('.js-gm-control-damage-dialog-action-button').on("click", function(event) {
+		event.preventDefault();
+		// Update data to exiting character in gm_control_sheet
+		gm_control_apply_damage( gm_control_currently_editing, $(".js-applied-damage-field").val() );
+//		console.log( gm_control_sheet[gm_control_currently_editing] );
+		// Refresh Sheet
+		gm_control_display_sheet();
+		gm_control_currently_editing = 0;
+		$('.js-gm-control-damage-dialog').modal('hide');
+		return false;
+	} );
+
+
+	$('.js-gm-control-damage-dialog').modal();
+}
+
+
+function gm_control_show_edit_fatigue_dialog(character, index) {
+	gm_control_init_entry_form(character);
+	$(".js-gm-control-fatigue-dialog-action-button").val("Save").button('refresh');
+	$(".js-gm-control-fatigue-dialog-title").text("Applying Damage");
+
+	options_html = "";
+	for(damagecount = 1; damagecount < 21; damagecount++)
+		options_html += '<option value="' + damagecount + '">' + damagecount+ ' points</option>';
+
+	$(".js-applied-fatigue-field").html( options_html );
+	$(".js-area-add-more").hide();
+	gm_control_currently_editing = index;
+	$('.js-gm-control-fatigue-dialog-action-button').unbind('click');
+	$('.js-gm-control-fatigue-dialog-action-button').on("click", function(event) {
+		event.preventDefault();
+		// Update data to exiting character in gm_control_sheet
+		gm_control_apply_fatigue( gm_control_currently_editing, $(".js-applied-fatigue-field").val() );
+//		console.log( gm_control_sheet[gm_control_currently_editing] );
+		// Refresh Sheet
+		gm_control_display_sheet();
+		gm_control_currently_editing = 0;
+		$('.js-gm-control-fatigue-dialog').modal('hide');
+		return false;
+	} );
+
+
+	$('.js-gm-control-fatigue-dialog').modal();
 }
 
 function gm_control_show_duplicate_line_dialog(character) {
@@ -584,7 +715,32 @@ function gm_control_refresh_events() {
 	$('.js-gm-control-save').click( function(event) {
 		debugConsole(".js-gm-control-save clicked");
 		event.preventDefault();
-		create_alert("This function is still a work in progress", "danger");
+//		create_alert("This function is still a work in progress", "danger");
+		number_items = 0;
+		if( gm_control_sheet_currently_selected.length > 0)
+			number_items = gm_control_sheet_currently_selected.length;
+		else
+			number_items = gm_control_sheet.length;
+
+		$(".js-gm-control-save-message").text("You are saving " + number_items + " characters in this group");
+
+		$(".js-gm-control-save-dialog-action-button").unbind("click");
+		$(".js-gm-control-save-dialog-action-button").click( function() {
+
+			if( gm_control_sheet_currently_selected.length > 0)
+				export_json = gm_control_export_json(true);
+			else
+				export_json = gm_control_export_json(false);
+
+			save_name = "( Unnamed )";
+			if( $(".js-gm-control-save-dialog-name").val() != "")
+				save_name = $(".js-gm-control-save-dialog-name").val();
+
+			local_storage_save( "gm_control_saved_items" , export_json, false, save_name );
+
+		});
+
+		$(".js-gm-control-save-dialog").modal();
 		return false;
 	} );
 
@@ -592,15 +748,99 @@ function gm_control_refresh_events() {
 	$('.js-gm-control-load').click( function(event) {
 		debugConsole(".js-gm-control-load clicked");
 		event.preventDefault();
-		create_alert("This function is still a work in progress", "danger");
+
+
+		$(".js-gm-control-load-dialog-overwrite").removeAttr("checked");
+
+
+		propogate_load_items();
+
+		// handler functions for new html
+		$(".js-gm-control-load-dialog-load").unbind("click");
+		$(".js-gm-control-load-dialog-load").click( function() {
+			do_it = false;
+			if( gm_control_sheet.length > 0 &&  $('.js-gm-control-load-dialog-overwrite').is(":checked") ) {
+				if( confirm("Are you sure you want to overwrite your current control group?") )
+					do_it = true;
+			} else {
+				do_it = true;
+			}
+
+			if( do_it ) {
+				item_index = $(this).attr("ref") / 1;
+				if($('.js-gm-control-load-dialog-overwrite').is(":checked"))
+					gm_control_sheet = Array();
+
+					loaded_items = local_storage_retrieve("gm_control_saved_items", item_index);
+					//for(loaded_item_count = 0; loaded_item_count < loaded_items.length; loaded_item_count++)
+					gm_control_import_json(JSON.stringify(loaded_items));
+
+					gm_control_display_sheet();
+				$('.js-gm-control-load-dialog').modal('hide');
+			}
+		});
+
+		$(".js-gm-control-load-dialog-remove").unbind("click");
+		$(".js-gm-control-load-dialog-remove").click( function() {
+			if( confirm("Are you sure you want to remove this group?") ) {
+				index_to_remove = $(this).attr("ref") / 1;
+				local_stroage_remove("gm_control_saved_items", index_to_remove);
+				propogate_load_items();
+			}
+		});
+
+		$(".js-gm-control-load-dialog").modal();
 		return false;
 	} );
+
+	function propogate_load_items() {
+		load_html = "";
+		saved_items = local_storage_retrieve("gm_control_saved_items");
+		load_html += "<table>";
+		load_html += "<tr>";
+		load_html += "<th>Group Name</th>";
+		load_html += "<th>Saved On</th>";
+		load_html += "<th>Number in Group</th>";
+		load_html += "<th>&nbsp;</th>";
+		load_html += "<r>";
+		for(saved_item_count = 0; saved_item_count < saved_items.length; saved_item_count++) {
+			item_data = JSON.parse(saved_items[saved_item_count].data);
+			load_html += "<tr>";
+			load_html += "<td>" + saved_items[saved_item_count].name + "</td>";
+			load_html += "<td>" + saved_items[saved_item_count].saved + "</td>";
+			load_html += "<td>" + item_data.length + "</td>";
+			load_html += "<td>";
+			// TODO control functions
+			load_html += ' <a href="#" ref="' + saved_item_count + '" title="Load This Group" class="js-gm-control-load-dialog-load"><span class="glyphicon glyphicon-floppy-open"></span></a> ';
+			load_html += ' <a href="#" ref="' + saved_item_count + '" title="Remove This Group" class="js-gm-control-load-dialog-remove"><span class="glyphicon glyphicon-trash"></span></a> ';
+
+			load_html += "</td>";
+			load_html += "</tr>";
+		}
+		load_html += "</table>";
+
+		$(".js-gm-control-load-saved-items").html(load_html);
+	}
 
 	$('.js-gm-control-import').unbind('click');
 	$('.js-gm-control-import').click( function(event) {
 		debugConsole(".js-gm-control-import clicked");
 		event.preventDefault();
-		create_alert("This function is still a work in progress", "danger");
+
+		$(".js-gm-control-import-dialog-overwrite").removeAttr("checked");
+		$(".js-gm-control-import-dialog-action-button").unbind("click");
+		$(".js-gm-control-import-dialog-action-button").click( function() {
+			import_string = $(".js-gm-control-import-dialog-data").val();
+			overwrite = false;
+			if( $('.js-gm-control-import-dialog-overwrite').is(":checked") )
+				overwrite = true;
+			gm_control_import_json(import_string, overwrite);
+		});
+
+
+
+		$(".js-gm-control-import-dialog").modal();
+
 		return false;
 	} );
 
@@ -608,7 +848,18 @@ function gm_control_refresh_events() {
 	$('.js-gm-control-export').click( function(event) {
 		debugConsole(".js-gm-control-export clicked");
 		event.preventDefault();
-		create_alert("This function is still a work in progress", "danger");
+		if( gm_control_sheet_currently_selected.length > 0)
+			export_json = gm_control_export_json(true);
+		else
+			export_json = gm_control_export_json(false);
+
+		$(".js-gm-control-export-dialog-data").unbind("click");
+		$(".js-gm-control-export-dialog-data").click( function() {
+			$(this).select();
+		});
+		$(".js-gm-control-export-dialog-data").val( export_json );
+		$(".js-gm-control-export-dialog").modal();
+
 		return false;
 	} );
 
@@ -638,6 +889,23 @@ function gm_control_refresh_events() {
 		gm_control_show_edit_line_dialog(gm_control_sheet[ $(this).attr("ref")], $(this).attr("ref"));
 		return false;
 	} );
+
+	$('.js-gm-control-damage-edit').unbind('click');
+	$('.js-gm-control-damage-edit').click( function(event) {
+		debugConsole(".js-gm-control-damage-edit clicked");
+		event.preventDefault();
+		gm_control_show_edit_damage_dialog(gm_control_sheet[ $(this).attr("ref")], $(this).attr("ref"));
+		return false;
+	} );
+
+	$('.js-gm-control-fatigue-edit').unbind('click');
+	$('.js-gm-control-fatigue-edit').click( function(event) {
+		debugConsole(".js-gm-control-fatigue-edit clicked");
+		event.preventDefault();
+		gm_control_show_edit_fatigue_dialog(gm_control_sheet[ $(this).attr("ref")], $(this).attr("ref"));
+		return false;
+	} );
+
 
 	$('.js-select-check').unbind('change');
 	$(".js-select-check").change( function() {
@@ -723,7 +991,15 @@ function gm_control_refresh_events() {
 }
 
 function sort_chars_by_name(a,b) {
-	return a.name > b.name;
+	if (a.name < b.name){
+		return -1;
+	} else {
+		if (a.name > b.name) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}
 }
 
 function sort_chars_by_speed(a,b) {
@@ -778,9 +1054,7 @@ function gm_control_sort_by_base_speed() {
 
 function gm_control_sort_by_name() {
 	debugConsole("gm_control_sort_by_name called");
-	for(gm_rand_count = 0; gm_rand_count < gm_control_sheet.length; gm_rand_count++) {
-		gm_control_sheet[gm_rand_count].random_roll = 0;
-	}
+
 	gm_control_sheet.sort( sort_chars_by_name );
 	gm_control_display_sheet();
 }
