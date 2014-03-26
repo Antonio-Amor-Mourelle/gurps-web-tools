@@ -422,7 +422,7 @@ function gm_control_init_entry_form(character) {
 
 		$(".js-char-field-dodge").val('7');
 		$(".js-char-field-parry").val('0');
-		$(".js-char-field-block").val('-');
+		$(".js-char-field-block").val('0');
 		$(".js-char-field-dr").val('0');
 
 		$(".js-char-field-attack_skill").val('10');
@@ -439,57 +439,70 @@ function gm_control_init_entry_form(character) {
 
 	$(".js-char-field-move").unbind("keyup");
 	$(".js-char-field-move").keyup( function() {
-			gm_control_update_edit_char()
+			gm_control_update_edit_char();
 		}
 	);
 
 	$(".js-char-field-speed").unbind("keyup");
 	$(".js-char-field-speed").keyup( function() {
-			gm_control_update_edit_char()
+			gm_control_update_edit_char('speed');
 		}
 	);
 
 	$(".js-char-field-st").unbind("keyup");
 	$(".js-char-field-st").keyup( function() {
-			gm_control_update_edit_char()
+			gm_control_update_edit_char('st');
 		}
 	);
 
 	$(".js-char-field-dx").unbind("keyup");
 	$(".js-char-field-dx").keyup( function() {
-			gm_control_update_edit_char()
+			gm_control_update_edit_char();
 		}
 	);
 
 	$(".js-char-field-iq").unbind("keyup");
 	$(".js-char-field-iq").keyup( function() {
-			gm_control_update_edit_char()
+			gm_control_update_edit_char('iq');
 		}
 	);
 
 	$(".js-char-field-ht").unbind("keyup");
 	$(".js-char-field-ht").keyup( function() {
-			gm_control_update_edit_char()
+			gm_control_update_edit_char('ht');
 		}
 	);
 }
 
-function gm_control_update_edit_char() {
+function gm_control_update_edit_char(changed_name) {
 	debugConsole("gm_control_update_edit_char() called");
-	new_speed = ( $(".js-char-field-ht").val() / 1+ $(".js-char-field-st").val() / 1 ) / 4;
-	$(".js-char-field-speed").val( new_speed );
-	$(".js-char-field-move").val( Math.floor(new_speed) );
-	$(".js-char-field-will").val( $(".js-char-field-iq").val() );
-	$(".js-char-field-per").val( $(".js-char-field-iq").val() );
 
-	$(".js-char-field-hp").val( $(".js-char-field-st").val() );
-	$(".js-char-field-curr_hp").val( $(".js-char-field-st").val() );
+	if(changed_name == "st" || changed_name == "ht") {
+		new_speed = ( $(".js-char-field-ht").val() / 1+ $(".js-char-field-st").val() / 1 ) / 4;
+		$(".js-char-field-speed").val( new_speed );
+		$(".js-char-field-move").val( Math.floor($(".js-char-field-speed").val()  / 1) );
+		$(".js-char-field-dodge").val( $(".js-char-field-move").val() / 1  + 3  );
+	}
 
-	$(".js-char-field-fatigue").val( $(".js-char-field-ht").val() );
-	$(".js-char-field-curr_fatigue").val( $(".js-char-field-ht").val() );
+	if(changed_name == "speed" ) {
+		$(".js-char-field-move").val( Math.floor($(".js-char-field-speed").val()  / 1) );
+		$(".js-char-field-dodge").val( $(".js-char-field-move").val() / 1  + 3  );
+	}
 
-	$(".js-char-field-move").val( Math.floor($(".js-char-field-speed").val()  / 1) );
-	$(".js-char-field-dodge").val( $(".js-char-field-move").val() / 1  + 3  );
+	if(changed_name == "iq") {
+		$(".js-char-field-will").val( $(".js-char-field-iq").val() );
+		$(".js-char-field-per").val( $(".js-char-field-iq").val() );
+	}
+
+	if(changed_name == "st") {
+		$(".js-char-field-hp").val( $(".js-char-field-st").val() );
+		$(".js-char-field-curr_hp").val( $(".js-char-field-st").val() );
+	}
+	if(changed_name == "ht") {
+		$(".js-char-field-fatigue").val( $(".js-char-field-ht").val() );
+		$(".js-char-field-curr_fatigue").val( $(".js-char-field-ht").val() );
+	}
+
 }
 
 function gm_control_assign_data_to_char(character) {
