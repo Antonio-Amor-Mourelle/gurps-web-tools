@@ -758,6 +758,7 @@ function gm_control_refresh_events() {
 		// handler functions for new html
 		$(".js-gm-control-load-dialog-load").unbind("click");
 		$(".js-gm-control-load-dialog-load").click( function() {
+			event.preventDefault();
 			do_it = false;
 			if( gm_control_sheet.length > 0 &&  $('.js-gm-control-load-dialog-overwrite').is(":checked") ) {
 				if( confirm("Are you sure you want to overwrite your current control group?") )
@@ -782,6 +783,7 @@ function gm_control_refresh_events() {
 
 		$(".js-gm-control-load-dialog-remove").unbind("click");
 		$(".js-gm-control-load-dialog-remove").click( function() {
+			event.preventDefault();
 			if( confirm("Are you sure you want to remove this group?") ) {
 				index_to_remove = $(this).attr("ref") / 1;
 				local_stroage_remove("gm_control_saved_items", index_to_remove);
