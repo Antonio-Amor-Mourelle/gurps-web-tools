@@ -739,8 +739,10 @@ function gm_control_refresh_events() {
 			local_storage_save( "gm_control_saved_items" , export_json, false, save_name );
 
 		});
-
-		$(".js-gm-control-save-dialog").modal();
+		if(gm_control_sheet.length > 0)
+			$(".js-gm-control-save-dialog").modal();
+		else
+			create_alert("You need to have items in your control sheet to save them", "warning");
 		return false;
 	} );
 
@@ -865,7 +867,12 @@ function gm_control_refresh_events() {
 			$(this).select();
 		});
 		$(".js-gm-control-export-dialog-data").val( export_json );
-		$(".js-gm-control-export-dialog").modal();
+
+		if(gm_control_sheet.length > 0)
+			$(".js-gm-control-export-dialog").modal();
+		else
+			create_alert("You need to have items in your control sheet to export them", "warning");
+
 
 		return false;
 	} );
