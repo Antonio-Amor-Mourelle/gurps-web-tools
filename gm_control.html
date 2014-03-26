@@ -31,7 +31,7 @@
 		<div class="modal-dialog">
 	    	<div class="modal-content">
 	      		<div class="modal-header">
-					<h4 class="modal-title js-gm-control-damage-dialog-title">Exported JSON</h4>
+					<h4 class="modal-title js-gm-control-export-dialog-title">Exported JSON</h4>
 				</div>
 				<div class="modal-body">
 					<div class="row">
@@ -53,7 +53,7 @@
 		<div class="modal-dialog">
 	    	<div class="modal-content">
 	      		<div class="modal-header">
-					<h4 class="modal-title js-gm-control-damage-dialog-title">Import JSON</h4>
+					<h4 class="modal-title js-gm-control-import-dialog-title">Import JSON</h4>
 				</div>
 				<div class="modal-body">
 					<div class="row">
@@ -78,7 +78,7 @@
 		<div class="modal-dialog">
 	    	<div class="modal-content">
 	      		<div class="modal-header">
-					<h4 class="modal-title js-gm-control-damage-dialog-title">Save Items</h4>
+					<h4 class="modal-title js-gm-control-save-dialog-title">Save Items</h4>
 				</div>
 				<div class="modal-body">
 					<div class="row">
@@ -103,7 +103,7 @@
 		<div class="modal-dialog">
 	    	<div class="modal-content">
 	      		<div class="modal-header">
-					<h4 class="modal-title js-gm-control-damage-dialog-title">Load Items</h4>
+					<h4 class="modal-title js-gm-control-load-dialog-title">Load Items</h4>
 				</div>
 				<div class="modal-body">
 					<div class="row">
@@ -132,13 +132,13 @@
 				<div class="modal-body">
 					<div class="row">
 						<div class="col-xs-12">
-							<label>Name: <input readonly="1" type="text" class="js-char-field-name" name="name" /></label>
-							<label>DR: <input readonly="1" type="text" class="js-char-field-dr" name="dr" /></label>
+							<label>Name: <input readonly="1" type="text" class="js-char-entry-field-name" name="name" /></label>
+							<label>DR: <input readonly="1" type="text" class="js-char-entry-field-dr" name="dr" /></label>
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-xs-3"><label>Curr HP: <input readonly="1" type="text" class="js-char-field-curr_hp" name="curr_hp" /></label></div>
-						<div class="col-xs-3"><label>Max HP: <input readonly="1" type="text" class="js-char-field-hp" name="hp" /></label></div>
+						<div class="col-xs-3"><label>Curr HP: <input readonly="1" type="text" class="js-char-entry-field-curr_hp" name="curr_hp" /></label></div>
+						<div class="col-xs-3"><label>Max HP: <input readonly="1" type="text" class="js-char-entry-field-hp" name="hp" /></label></div>
 					</div>
 					<div class="row">
 						<div class="col-xs-12">
@@ -168,12 +168,12 @@
 				<div class="modal-body">
 					<div class="row">
 						<div class="col-xs-12">
-							<label>Name: <input readonly="1" type="text" class="js-char-field-name" name="name" /></label>
+							<label>Name: <input readonly="1" type="text" class="js-char-entry-field-name" name="name" /></label>
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-xs-3"><label>Curr Fatigue: <input readonly="1" type="text" class="js-char-field-curr_fatigue" name="curr_fatigue" /></label></div>
-						<div class="col-xs-3"><label>Max Fatigue: <input readonly="1" type="text" class="js-char-field-fatigue" name="fatigue" /></label></div>
+						<div class="col-xs-3"><label>Curr Fatigue: <input readonly="1" type="text" class="js-char-entry-field-curr_fatigue" name="curr_fatigue" /></label></div>
+						<div class="col-xs-3"><label>Max Fatigue: <input readonly="1" type="text" class="js-char-entry-field-fatigue" name="fatigue" /></label></div>
 					</div>
 					<div class="row">
 						<div class="col-xs-12">
@@ -232,8 +232,8 @@
 						<div class="col-xs-12"><h5>Defenses</h5></div>
 					</div>
 					<div class="row">
-						<div class="col-xs-3"><label>Dodge: <input pattern="\d*" type="text" class="js-char-field-dodge" name="block" /></label></div>
-						<div class="col-xs-3"><label>Block: <input pattern="\d*" type="text" class="js-char-field-block" name="dodge" /></label></div>
+						<div class="col-xs-3"><label>Dodge: <input pattern="\d*" type="text" class="js-char-field-dodge" name="dodge" /></label></div>
+						<div class="col-xs-3"><label>Block: <input pattern="\d*" type="text" class="js-char-field-block" name="block" /></label></div>
 						<div class="col-xs-3"><label>Parry: <input pattern="\d*" type="text" class="js-char-field-parry" name="parry" /></label></div>
 						<div class="col-xs-3"><label>DR: <input pattern="\d*" type="text" class="js-char-field-dr" name="dr" /></label></div>
 					</div>
@@ -313,13 +313,13 @@
 		<div class="row">
 			<div class="col-sm-12">
 				<a href="#" class="js-gm-control-new"><span class="glyphicon glyphicon-file" title="New Control"></span></a>
-				<a href="#" class="js-gm-control-add-line"><span class="glyphicon glyphicon-th-list" title="Add a New Entry"></span></a>
+				<a href="#" class="js-gm-control-add-line"><span class="glyphicon glyphicon-user" title="Add a New Entry"></span></a>
 				<a href="#" class="js-gm-control-trash"><span class="glyphicon glyphicon-trash" title="Remove Checked Items"></span></a>
 				<a href="#" class="js-gm-control-save"><span class="glyphicon glyphicon-save" title="Save"></span></a>
 				<a href="#" class="js-gm-control-load"><span class="glyphicon glyphicon-open" title="Load"></span></a>
 				<a href="#" class="js-gm-control-export"><span class="glyphicon glyphicon-export" title="Export"></span></a>
 				<a href="#" class="js-gm-control-import"><span class="glyphicon glyphicon-import" title="Import"></span></a>
-				<a href="#" class="js-gm-control-add-mooks"><span class="glyphicon glyphicon-user" title="Add Test Data"></span></a>
+<!--				<a href="#" class="js-gm-control-add-mooks"><span class="glyphicon glyphicon-user" title="Add Test Data"></span></a> -->
 				<a href="#" class="js-gm-control-sort-by-name"><span class="glyphicon glyphicon-sort-by-alphabet" title="Sort by Name"></span></a>
 				<a href="#" class="js-gm-control-sort-by-base-speed"><span class="glyphicon glyphicon-sort-by-attributes-alt" title="Sort by Base Speed, then DX, then a random roll"></span></a>
 				<a href="#" class="js-gm-control-start-combat"><span class="glyphicon glyphicon glyphicon-play" title="Start Combat Session"></span></a>

@@ -359,6 +359,24 @@ function gm_control_display_sheet() {
 
 }
 
+function gm_control_propogate_damage_form(character) {
+	debugConsole("gm_control_init_entry_form() called");
+	if(character) {
+		$(".js-char-entry-field-name").val( character.get_name() );
+
+		$(".js-char-entry-field-hp").val( character.get_secondary('hp') );
+		$(".js-char-entry-field-curr_hp").val( character.get_secondary('curr_hp') );
+
+		$(".js-char-entry-field-fatigue").val( character.get_secondary('fatigue')  );
+		$(".js-char-entry-field-curr_fatigue").val( character.get_secondary('curr_fatigue') );
+
+		$(".js-char-entry-field-dodge").val( character.get_defense('dodge') );
+		$(".js-char-entry-field-parry").val( character.get_defense('parry') );
+		$(".js-char-entry-field-block").val( character.get_defense('block') );
+		$(".js-char-entry-field-dr").val( character.get_defense('dr') );
+	}
+}
+
 function gm_control_init_entry_form(character) {
 	debugConsole("gm_control_init_entry_form() called");
 	if(character) {
@@ -522,13 +540,16 @@ function gm_control_show_add_line_dialog() {
 
 		if(number_to_add > 1) {
 			for( add_count = 0; add_count < number_to_add; add_count++) {
-				new_name = $(".js-char-field-name").val() + " #" + (add_count + 1 );
+
 
 				// Create a new character object
 				newChar = new class_character();
 
 				// Add entry data to new character
 				newChar = gm_control_assign_data_to_char( newChar );
+
+				new_name = newChar.get_name() + " #" + (add_count + 1 );
+				console.log("new_name" + new_name);
 
 				newChar.set_name( new_name );
 				gm_control_sheet.push( newChar );
@@ -589,6 +610,7 @@ function gm_control_show_edit_damage_dialog(character, index) {
 	$(".js-applied-damage-field").html( options_html );
 	$(".js-area-add-more").hide();
 	gm_control_currently_editing = index;
+	gm_control_propogate_damage_form(gm_control_sheet[gm_control_currently_editing]);
 	$('.js-gm-control-damage-dialog-action-button').unbind('click');
 	$('.js-gm-control-damage-dialog-action-button').on("click", function(event) {
 		event.preventDefault();
@@ -619,6 +641,7 @@ function gm_control_show_edit_fatigue_dialog(character, index) {
 	$(".js-applied-fatigue-field").html( options_html );
 	$(".js-area-add-more").hide();
 	gm_control_currently_editing = index;
+	gm_control_propogate_damage_form(gm_control_sheet[gm_control_currently_editing]);
 	$('.js-gm-control-fatigue-dialog-action-button').unbind('click');
 	$('.js-gm-control-fatigue-dialog-action-button').on("click", function(event) {
 		event.preventDefault();
