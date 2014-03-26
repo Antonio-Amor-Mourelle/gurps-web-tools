@@ -5,8 +5,8 @@
 	<meta name="viewport" content="width=device-width">
 	<title>Flexible Dice Roller</title>
 	<meta name="description" value="Roll some Bones. This little tool should be able to handle pretty much any combo you throw at it. It'll even handle damage rolling and wound calculation for you if you wish.">
-	<link rel="stylesheet" href="./css/bootstrap.min.css?v=2014032601" type="text/css">
-	<link rel="stylesheet" href="./css/style.css?v=2014032601" type="text/css">
+	<link rel="stylesheet" href="./css/bootstrap.min.css?v=2014032603" type="text/css">
+	<link rel="stylesheet" href="./css/style.css?v=2014032603" type="text/css">
 	<link rel="icon" type="image/png" href="./img/sw_fan_78x50.png" />
 	<link rel="apple-touch-icon" href="./img/sw_fan_256.png">
 	<meta name="apple-mobile-web-app-capable" content="yes" />
@@ -75,11 +75,11 @@
 </div>
 </body>
 
-<script src="./js/jquery-1.10.2.min.js?v=2014032601"></script>
-<script src="./js/bootstrap.min.js?v=2014032601"></script>
-<script src="./js/functions.js?v=2014032601"></script>
-<script src="./js/localstorage.js?v=2014032601"></script>
-<script src="./js/dice.js?v=2014032601"></script>
+<script src="./js/jquery-1.10.2.min.js?v=2014032603"></script>
+<script src="./js/bootstrap.min.js?v=2014032603"></script>
+<script src="./js/functions.js?v=2014032603"></script>
+<script src="./js/localstorage.js?v=2014032603"></script>
+<script src="./js/dice.js?v=2014032603"></script>
 <script>
 
 $("input[name=roll]").click(function() {
@@ -88,7 +88,7 @@ $("input[name=roll]").click(function() {
 });
 $("input[name=dieinput]").keyup(function(event) {
         if(event.which == 13) {
-                event.preventDefault();
+                prevent_default(event);
                 $("#result").text(parseRoll($("input[name=dieinput]").val()));
                 $("#rolls").html(displayRolls());
         }

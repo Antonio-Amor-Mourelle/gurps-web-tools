@@ -20,7 +20,7 @@ function debugConsole(message) {
 }
 
 $(".ios_app_click").click( function(event) {
-	event.preventDefault();
+	prevent_default(event);
 	url = $(this).attr("href");
     window.location.assign(url);
     return false;

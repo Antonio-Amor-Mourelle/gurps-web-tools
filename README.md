@@ -19,6 +19,9 @@ The roadmap for these tools include:
 
 You should be able to double-click on the HTML file in any web modern web browser to use the tools.
 
+##Requirements
+Any modern web browser should work... there does seem to be an issue with event.preventDefault() in ie9, but this is not an issue in ie10 (and seems to work great in ie10+). Not sure if I want to even bother trying to fix ie9.
+
 ##Thanks
 Many thanks to [Glyphicons](http://glyphicons.com/) for providing their Halflings for users of [Bootstrap 3](http://getbootstrap.com/) for free!
 
