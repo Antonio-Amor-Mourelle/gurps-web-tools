@@ -79,32 +79,32 @@ function gm_control_update_turn_box() {
 	$(".js-turn-controls").html( html );
 
 	$(".js-gm-control-go-to-beginning-turn").unbind('click');
-	$(".js-gm-control-go-to-beginning-turn").click( function() {
+	$(".js-gm-control-go-to-beginning-turn").click( function(event) {
 		debugConsole(".js-gm-control-go-to-beginning-turn clicked");
-		event.preventDefault();
+		prevent_default(event);
 		gm_control_current_combatatant = 0;
 		gm_control_update_turn_box();
 	});
 
 	$(".js-gm-control-go-to-previous-turn").unbind('click');
-	$(".js-gm-control-go-to-previous-turn").click( function() {
+	$(".js-gm-control-go-to-previous-turn").click( function(event) {
 		debugConsole(".js-gm-control-go-to-previous-turn clicked");
-		event.preventDefault();
+		prevent_default(event);
 		// TODO
 		gm_control_update_turn_box();
 	});
 
 	$(".js-gm-control-stop-combat").unbind('click');
-	$(".js-gm-control-stop-combat").click( function() {
+	$(".js-gm-control-stop-combat").click( function(event) {
 		debugConsole(".js-gm-control-stop-combat clicked");
-		event.preventDefault();
+		prevent_default(event);
 		gm_control_stop_combat();
 	});
 
 	$(".js-gm-control-go-to-next-turn").unbind('click');
-	$(".js-gm-control-go-to-next-turn").click( function() {
+	$(".js-gm-control-go-to-next-turn").click( function(event) {
 		debugConsole(".js-gm-control-go-to-next-turn clicked");
-		event.preventDefault();
+		prevent_default(event);
 		gm_control_next_combatatant();
 		gm_control_update_turn_box();
 
@@ -517,7 +517,7 @@ function gm_control_show_add_line_dialog() {
 
 	$('.js-gm-control-line-dialog-action-button').unbind('click');
 	$('.js-gm-control-line-dialog-action-button').on("click", function(event) {
-		event.preventDefault();
+		prevent_default(event);
 
 		number_to_add = $(".js-char-field-add-more").val();
 
@@ -563,7 +563,7 @@ function gm_control_show_edit_line_dialog(character, index) {
 	gm_control_currently_editing = index;
 	$('.js-gm-control-line-dialog-action-button').unbind('click');
 	$('.js-gm-control-line-dialog-action-button').on("click", function(event) {
-		event.preventDefault();
+		prevent_default(event);
 		// Update data to exiting character in gm_control_sheet
 		gm_control_sheet[gm_control_currently_editing] = gm_control_assign_data_to_char( gm_control_sheet[gm_control_currently_editing] );
 //		console.log( gm_control_sheet[gm_control_currently_editing] );
@@ -592,7 +592,7 @@ function gm_control_show_edit_damage_dialog(character, index) {
 	gm_control_currently_editing = index;
 	$('.js-gm-control-damage-dialog-action-button').unbind('click');
 	$('.js-gm-control-damage-dialog-action-button').on("click", function(event) {
-		event.preventDefault();
+		prevent_default(event);
 		// Update data to exiting character in gm_control_sheet
 		gm_control_apply_damage( gm_control_currently_editing, $(".js-applied-damage-field").val() );
 //		console.log( gm_control_sheet[gm_control_currently_editing] );
@@ -622,7 +622,7 @@ function gm_control_show_edit_fatigue_dialog(character, index) {
 	gm_control_currently_editing = index;
 	$('.js-gm-control-fatigue-dialog-action-button').unbind('click');
 	$('.js-gm-control-fatigue-dialog-action-button').on("click", function(event) {
-		event.preventDefault();
+		prevent_default(event);
 		// Update data to exiting character in gm_control_sheet
 		gm_control_apply_fatigue( gm_control_currently_editing, $(".js-applied-fatigue-field").val() );
 //		console.log( gm_control_sheet[gm_control_currently_editing] );
@@ -646,7 +646,7 @@ function gm_control_show_duplicate_line_dialog(character) {
 
 	$('.js-gm-control-line-dialog-action-button').unbind('click');
 	$('.js-gm-control-line-dialog-action-button').on("click", function(event) {
-		event.preventDefault();
+		prevent_default(event);
 
 		number_to_add = $(".js-char-field-add-more").val();
 
@@ -693,7 +693,7 @@ function gm_control_refresh_events() {
 	$('.js-gm-control-new').unbind('click');
 	$('.js-gm-control-new').click( function(event) {
 		debugConsole(".js-gm-control-new clicked");
-		event.preventDefault();
+		prevent_default(event);
 		if( confirm("This will clear out all your items in your current control sheet. Are you sure you want to do this?") )
 			gm_control_sheet = Array();
 		gm_control_display_sheet();
@@ -703,7 +703,7 @@ function gm_control_refresh_events() {
 	$('.js-gm-control-start-combat').unbind('click');
 	$('.js-gm-control-start-combat').click( function(event) {
 		debugConsole(".js-gm-control-start-combat clicked");
-		event.preventDefault();
+		prevent_default(event);
 		gm_control_start_combat();
 		return false;
 	} );
@@ -711,7 +711,7 @@ function gm_control_refresh_events() {
 	$('.js-gm-control-add-line').unbind('click');
 	$('.js-gm-control-add-line').click( function(event) {
 		debugConsole(".js-gm-control-add-line clicked");
-		event.preventDefault();
+		prevent_default(event);
 		gm_control_show_add_line_dialog();
 		return false;
 	} );
@@ -719,7 +719,7 @@ function gm_control_refresh_events() {
 	$('.js-gm-control-save').unbind('click');
 	$('.js-gm-control-save').click( function(event) {
 		debugConsole(".js-gm-control-save clicked");
-		event.preventDefault();
+		prevent_default(event);
 //		create_alert("This function is still a work in progress", "danger");
 		number_items = 0;
 		if( gm_control_sheet_currently_selected.length > 0)
@@ -754,7 +754,7 @@ function gm_control_refresh_events() {
 	$('.js-gm-control-load').unbind('click');
 	$('.js-gm-control-load').click( function(event) {
 		debugConsole(".js-gm-control-load clicked");
-		event.preventDefault();
+		prevent_default(event);
 
 
 		$(".js-gm-control-load-dialog-overwrite").removeAttr("checked");
@@ -764,8 +764,8 @@ function gm_control_refresh_events() {
 
 		// handler functions for new html
 		$(".js-gm-control-load-dialog-load").unbind("click");
-		$(".js-gm-control-load-dialog-load").click( function() {
-			event.preventDefault();
+		$(".js-gm-control-load-dialog-load").click( function(event) {
+			prevent_default(event);
 			do_it = false;
 			if( gm_control_sheet.length > 0 &&  $('.js-gm-control-load-dialog-overwrite').is(":checked") ) {
 				if( confirm("Are you sure you want to overwrite your current control group?") )
@@ -789,8 +789,8 @@ function gm_control_refresh_events() {
 		});
 
 		$(".js-gm-control-load-dialog-remove").unbind("click");
-		$(".js-gm-control-load-dialog-remove").click( function() {
-			event.preventDefault();
+		$(".js-gm-control-load-dialog-remove").click( function(event) {
+			prevent_default(event);
 			if( confirm("Are you sure you want to remove this group?") ) {
 				index_to_remove = $(this).attr("ref") / 1;
 				local_stroage_remove("gm_control_saved_items", index_to_remove);
@@ -839,7 +839,7 @@ function gm_control_refresh_events() {
 	$('.js-gm-control-import').unbind('click');
 	$('.js-gm-control-import').click( function(event) {
 		debugConsole(".js-gm-control-import clicked");
-		event.preventDefault();
+		prevent_default(event);
 
 		$(".js-gm-control-import-dialog-overwrite").removeAttr("checked");
 		$(".js-gm-control-import-dialog-action-button").unbind("click");
@@ -861,7 +861,7 @@ function gm_control_refresh_events() {
 	$('.js-gm-control-export').unbind('click');
 	$('.js-gm-control-export').click( function(event) {
 		debugConsole(".js-gm-control-export clicked");
-		event.preventDefault();
+		prevent_default(event);
 		if( gm_control_sheet_currently_selected.length > 0)
 			export_json = gm_control_export_json(true);
 		else
@@ -886,7 +886,7 @@ function gm_control_refresh_events() {
 	$('.js-gm-control-line-remove').unbind('click');
 	$('.js-gm-control-line-remove').click( function(event) {
 		debugConsole(".js-gm-control-remove clicked");
-		event.preventDefault();
+		prevent_default(event);
 		if( confirm("Are you sure you want to delete this line?") )
 			gm_control_sheet.splice( $(this).attr("ref"), 1);
 		gm_control_display_sheet();
@@ -896,7 +896,7 @@ function gm_control_refresh_events() {
 	$('.js-gm-control-line-duplicate').unbind('click');
 	$('.js-gm-control-line-duplicate').click( function(event) {
 		debugConsole(".js-gm-control-duplicate clicked");
-		event.preventDefault();
+		prevent_default(event);
 		gm_control_show_duplicate_line_dialog(gm_control_sheet[ $(this).attr("ref")]);
 		return false;
 	} );
@@ -904,7 +904,7 @@ function gm_control_refresh_events() {
 	$('.js-gm-control-line-edit').unbind('click');
 	$('.js-gm-control-line-edit').click( function(event) {
 		debugConsole(".js-gm-control-edit clicked");
-		event.preventDefault();
+		prevent_default(event);
 		gm_control_show_edit_line_dialog(gm_control_sheet[ $(this).attr("ref")], $(this).attr("ref"));
 		return false;
 	} );
@@ -912,7 +912,7 @@ function gm_control_refresh_events() {
 	$('.js-gm-control-damage-edit').unbind('click');
 	$('.js-gm-control-damage-edit').click( function(event) {
 		debugConsole(".js-gm-control-damage-edit clicked");
-		event.preventDefault();
+		prevent_default(event);
 		gm_control_show_edit_damage_dialog(gm_control_sheet[ $(this).attr("ref")], $(this).attr("ref"));
 		return false;
 	} );
@@ -920,7 +920,7 @@ function gm_control_refresh_events() {
 	$('.js-gm-control-fatigue-edit').unbind('click');
 	$('.js-gm-control-fatigue-edit').click( function(event) {
 		debugConsole(".js-gm-control-fatigue-edit clicked");
-		event.preventDefault();
+		prevent_default(event);
 		gm_control_show_edit_fatigue_dialog(gm_control_sheet[ $(this).attr("ref")], $(this).attr("ref"));
 		return false;
 	} );
@@ -951,9 +951,9 @@ function gm_control_refresh_events() {
 	} );
 
 	$(".js-gm-control-trash").unbind('click');
-	$(".js-gm-control-trash").click( function() {
+	$(".js-gm-control-trash").click( function(event) {
 		debugConsole(".js-gm-control-trash clicked");
-		event.preventDefault();
+		prevent_default(event);
 		if( confirm("Are you sure you want to remove the selected items?") ) {
 			for (var i = gm_control_sheet_currently_selected.length -1; i >= 0; i--)
    				gm_control_sheet.splice(gm_control_sheet_currently_selected[i],1);
@@ -964,15 +964,15 @@ function gm_control_refresh_events() {
 	});
 
 	$(".js-gm-control-add-mooks").unbind('click');
-	$(".js-gm-control-add-mooks").click( function() {
+	$(".js-gm-control-add-mooks").click( function(event) {
 		debugConsole(".js-gm-control-add-mooks clicked");
-		event.preventDefault();
+		prevent_default(event);
 		gm_control_propogate_mooks();
 	});
 
 	$(".js-gm-control-line-view").unbind('click');
-	$(".js-gm-control-line-view").click( function() {
-		event.preventDefault();
+	$(".js-gm-control-line-view").click( function(event) {
+		prevent_default(event);
 		debugConsole(".js-gm-control-line-view clicked");
 		ref = $(this).attr("ref");
 
@@ -986,23 +986,23 @@ function gm_control_refresh_events() {
 
 
 	$(".js-gm-control-add-mooks").unbind('click');
-	$(".js-gm-control-add-mooks").click( function() {
+	$(".js-gm-control-add-mooks").click( function(event) {
 		debugConsole(".js-gm-control-add-mooks clicked");
-		event.preventDefault();
+		prevent_default(event);
 		gm_control_propogate_mooks();
 	});
 
 	$(".js-gm-control-sort-by-name").unbind('click');
-	$(".js-gm-control-sort-by-name").click( function() {
+	$(".js-gm-control-sort-by-name").click( function(event) {
 		debugConsole(".js-gm-control-sort-by-name clicked");
-		event.preventDefault();
+		prevent_default(event);
 		gm_control_sort_by_name();
 	});
 
 	$(".js-gm-control-sort-by-base-speed").unbind('click');
-	$(".js-gm-control-sort-by-base-speed").click( function() {
+	$(".js-gm-control-sort-by-base-speed").click( function(event) {
 		debugConsole(".js-gm-control-sort-by-base-speed clicked");
-		event.preventDefault();
+		prevent_default(event);
 		gm_control_sort_by_base_speed();
 
 	});

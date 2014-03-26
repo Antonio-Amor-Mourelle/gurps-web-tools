@@ -87,3 +87,14 @@ function local_storage_retrieve(local_storage_var, index_to_retrieve) {
 			return false;
 	}
 }
+
+function prevent_default(event) {
+	if(event.preventDefault)
+	{
+		prevent_default(event);
+	}
+	else
+	{
+		event.returnValue = false;
+	}
+}

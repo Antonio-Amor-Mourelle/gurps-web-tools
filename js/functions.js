@@ -73,3 +73,4 @@ function create_alert(messageText, alertClass) {
 	window.setTimeout(function() { $(".alert").alert('close'); }, 2000);
 }
 
+
