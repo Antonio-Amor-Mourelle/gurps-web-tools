@@ -20,7 +20,11 @@ function gm_control_start_combat() {
 	gm_control_current_combatatant = 0;
 	gm_control_sort_by_base_speed();
 	gm_control_update_turn_box();
-	$(".js-turn-controls").slideDown();
+
+	if(gm_control_sheet.length > 0)
+		$(".js-turn-controls").slideDown();
+	else
+		create_alert("It's probably a good idea to have participants in the combat before you start combat.", "warning");
 }
 
 function gm_control_apply_damage(char_index, damage_amount) {
