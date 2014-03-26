@@ -796,28 +796,33 @@ function gm_control_refresh_events() {
 	function propogate_load_items() {
 		load_html = "";
 		saved_items = local_storage_retrieve("gm_control_saved_items");
-		load_html += "<table>";
-		load_html += "<tr>";
-		load_html += "<th>Group Name</th>";
-		load_html += "<th>Saved On</th>";
-		load_html += "<th>Number in Group</th>";
-		load_html += "<th>&nbsp;</th>";
-		load_html += "<r>";
-		for(saved_item_count = 0; saved_item_count < saved_items.length; saved_item_count++) {
-			item_data = JSON.parse(saved_items[saved_item_count].data);
+		if(saved_items.length > 0) {
+			load_html += '<label><input type="checkbox" name="overwrite" class="js-gm-control-load-dialog-overwrite" /> Overwrite all items</label>';
+			load_html += "<table>";
 			load_html += "<tr>";
-			load_html += "<td>" + saved_items[saved_item_count].name + "</td>";
-			load_html += "<td>" + saved_items[saved_item_count].saved + "</td>";
-			load_html += "<td>" + item_data.length + "</td>";
-			load_html += "<td>";
-			// TODO control functions
-			load_html += ' <a href="#" ref="' + saved_item_count + '" title="Load This Group" class="js-gm-control-load-dialog-load"><span class="glyphicon glyphicon-floppy-open"></span></a> ';
-			load_html += ' <a href="#" ref="' + saved_item_count + '" title="Remove This Group" class="js-gm-control-load-dialog-remove"><span class="glyphicon glyphicon-trash"></span></a> ';
+			load_html += "<th>Group Name</th>";
+			load_html += "<th>Saved On</th>";
+			load_html += "<th>Number in Group</th>";
+			load_html += "<th>&nbsp;</th>";
+			load_html += "<r>";
+			for(saved_item_count = 0; saved_item_count < saved_items.length; saved_item_count++) {
+				item_data = JSON.parse(saved_items[saved_item_count].data);
+				load_html += "<tr>";
+				load_html += "<td>" + saved_items[saved_item_count].name + "</td>";
+				load_html += "<td>" + saved_items[saved_item_count].saved + "</td>";
+				load_html += "<td>" + item_data.length + "</td>";
+				load_html += "<td>";
+				// TODO control functions
+				load_html += ' <a href="#" ref="' + saved_item_count + '" title="Load This Group" class="js-gm-control-load-dialog-load"><span class="glyphicon glyphicon-floppy-open"></span></a> ';
+				load_html += ' <a href="#" ref="' + saved_item_count + '" title="Remove This Group" class="js-gm-control-load-dialog-remove"><span class="glyphicon glyphicon-trash"></span></a> ';
 
-			load_html += "</td>";
-			load_html += "</tr>";
+				load_html += "</td>";
+				load_html += "</tr>";
+			}
+			load_html += "</table>";
+		} else {
+			load_html += "<p>You have no saved items on this device.</p>";
 		}
-		load_html += "</table>";
 
 		$(".js-gm-control-load-saved-items").html(load_html);
 	}
