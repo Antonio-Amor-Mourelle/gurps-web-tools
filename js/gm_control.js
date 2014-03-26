@@ -60,6 +60,7 @@ function gm_control_stop_combat() {
 		gm_control_sheet[gm_count].shock_amount = 0;
 	$(".js-turn-controls").slideUp();
 	gm_control_current_turn = 0;
+	gm_control_display_sheet();
 }
 
 function gm_control_update_turn_box() {
@@ -957,6 +958,7 @@ function gm_control_refresh_events() {
 			for (var i = gm_control_sheet_currently_selected.length -1; i >= 0; i--)
    				gm_control_sheet.splice(gm_control_sheet_currently_selected[i],1);
    			gm_control_sheet_currently_selected = Array();
+   			$(".js-gm-control-check-all").removeAttr("checked");
 			gm_control_display_sheet();
 		}
 	});
