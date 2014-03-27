@@ -964,6 +964,7 @@ function gm_control_refresh_events() {
 	$('.js-select-check').unbind('change');
 	$(".js-select-check").change( function() {
 		debugConsole(".js-select-check changed");
+		$(".js-gm-control-check-all").removeAttr("checked");
 		gm_control_sheet_currently_selected = Array()
 		$(".js-select-check:checked").each( function() {
 			debugConsole("SELECTCHECK() called - " + $(this).attr('ref'));
