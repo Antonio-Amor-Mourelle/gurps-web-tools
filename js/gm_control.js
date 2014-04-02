@@ -66,11 +66,11 @@ function gm_control_stop_combat() {
 function gm_control_update_turn_box() {
 	html = "<fieldset><legend>Combat Turn Control - Turn #" + gm_control_current_turn + "</legend>";
 	if(gm_control_current_combatatant > 0) {
-		html += '<a href="#" class="js-gm-control-go-to-beginning-turn"><span class="glyphicon glyphicon glyphicon-fast-backward" title="Go to start of turn"></span></a>';
-		html += '<a href="#" class="js-gm-control-go-to-previous-turn"><span class="glyphicon glyphicon glyphicon-backward" title="Start back a turn"></span></a>';
+		html += '<a href="#" class="js-gm-control-go-to-beginning-turn"><span class="glyphicon glyphicon-fast-backward" title="Go to start of turn"></span></a>';
+		html += '<a href="#" class="js-gm-control-go-to-previous-turn"><span class="glyphicon glyphicon-backward" title="Start back a turn"></span></a>';
 	} else {
-		html += '<span class="glyphicon glyphicon glyphicon-fast-backward" title="Start Combat Session">';
-		html += '<span class="glyphicon glyphicon glyphicon-backward" title="Start Combat Session">';
+		html += '<span class="glyphicon glyphicon glyphicon-fast-backward" title="Start Combat Session"></span>';
+		html += '<span class="glyphicon glyphicon glyphicon-backward" title="Start Combat Session"></span>';
 	}
 	html += '<a href="#" class="js-gm-control-stop-combat"><span class="glyphicon glyphicon glyphicon-stop" title="Stop Combat Session"></span></a>';
 	html += '<a href="#" class="js-gm-control-go-to-next-turn"><span class="glyphicon glyphicon glyphicon-forward" title="Go to next turn"></span></a>';
@@ -90,6 +90,9 @@ function gm_control_update_turn_box() {
 	$(".js-gm-control-go-to-previous-turn").click( function(event) {
 		debugConsole(".js-gm-control-go-to-previous-turn clicked");
 		event.preventDefault();
+		gm_control_current_combatatant = gm_control_current_combatatant - 1;
+		if(gm_control_current_combatatant < 0)
+			gm_control_current_combatatant = 0;
 		gm_control_update_turn_box();
 	});
 
