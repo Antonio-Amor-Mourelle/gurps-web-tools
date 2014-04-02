@@ -461,6 +461,12 @@ function gm_control_init_entry_form(character) {
 		}
 	);
 
+	$(".js-char-field-dx").unbind("keyup");
+	$(".js-char-field-dx").keyup( function() {
+			gm_control_update_edit_char('dx');
+		}
+	);
+
 	$(".js-char-field-iq").unbind("keyup");
 	$(".js-char-field-iq").keyup( function() {
 			gm_control_update_edit_char('iq');
