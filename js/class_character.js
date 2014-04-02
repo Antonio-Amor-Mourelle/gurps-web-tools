@@ -6,6 +6,7 @@ function class_character() {
 	function reset() {
 		debugConsole("reset() called");
 		this.name = "";
+		this.player = "";
 
 		this.attributes = {};
 		this.attributes.st = 10;
@@ -55,6 +56,18 @@ function class_character() {
 	function get_name() {
 		debugConsole("get_name() called");
 		return this.name;
+	}
+
+	this.set_player = set_player;
+	function set_player(new_value) {
+		debugConsole("set_player('" + new_value + "') called");
+		this.player = new_value;
+	}
+
+	this.get_player = get_player;
+	function get_player() {
+		debugConsole("get_player() called");
+		return this.player;
 	}
 
 	this.get_attribute = get_attribute;

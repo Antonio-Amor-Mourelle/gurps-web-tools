@@ -123,6 +123,7 @@ function gm_control_export_json(selected_only) {
 	for(count = 0; count < gm_control_sheet.length; count++) {
 		export_item = {
 			name: gm_control_sheet[count].get_name(),
+			player: gm_control_sheet[count].get_player(),
 
 			attributes: {
 				st: gm_control_sheet[count].get_attribute('st') / 1,
@@ -176,8 +177,13 @@ function gm_control_import_json(import_string, overwrite) {
 	try {
 		import_object = JSON.parse(import_string);
 
-		if( overwrite )
-			gm_control_sheet = Array();
+		if( overwrite ) {
+			for (var i = gm_control_sheet.length -1; i >= 0; i--) {
+				player_name = gm_control_sheet[i].get_player();
+				if( !player_name )
+   					gm_control_sheet.splice(i,1);
+			}
+		}
 
 		debugConsole("gm_control_import_json() - type is " + typeof(import_object));
 		if (typeof(import_object) == "object") {
@@ -200,6 +206,9 @@ function gm_control_import_object( importing_object ) {
 
 	if( typeof(importing_object.name) != "undefined")
 		return_value.set_name( importing_object.name );
+
+	if( typeof(importing_object.player) != "undefined")
+		return_value.set_player( importing_object.player );
 
 	if( typeof(importing_object.attributes.st) != "undefined")
 		return_value.set_attribute( 'st', importing_object.attributes.st / 1 );
@@ -266,12 +275,21 @@ function gm_control_display_sheet() {
 				checked = 'checked="checked" ';
 			}
 
-			html += '<td class="text-right"><span class="glyphicon glyphicon-move drag-select"></span><input ' + checked + 'type="checkbox" ref="' + count + '" class="js-select-check" /></td>';
+			player_name = gm_control_sheet[count].get_player();
+
+			is_pc = "is_pc='0'";
+			if(player_name)
+				is_pc = "is_pc='1'";
+
+			html += '<td class="text-right"><span class="glyphicon glyphicon-move drag-select"></span><input ' + is_pc + ' ' + checked + 'type="checkbox" ref="' + count + '" class="js-select-check" /></td>';
 			html += '<td>';
 			html += '<a href="#" ref="' + count + '" title="View This Entry" class="js-gm-control-line-view"><span class="glyphicon glyphicon-eye-open"></span></a> ';
 			if( gm_control_sheet[count].shock_amount )
 				html += "<span class='shock-damage' title='This character is in shock!'>-" + gm_control_sheet[count].shock_amount + "</span>";
 			html += gm_control_sheet[count].get_name();
+
+			if(player_name)
+				html += " (" + player_name + ")";
 			html += '<div class="js-mobile-details js-mobile-details-' + count + '" style="display:none">';
 			html += '<h5>Attributes</h5>';
 			html += '<div><strong>ST</strong>: ' + gm_control_sheet[count].get_attribute('st') + ' <strong>DX</strong>: ' + gm_control_sheet[count].get_attribute('dx') + ' <strong>IQ</strong>: ' + gm_control_sheet[count].get_attribute('iq') + ' <strong>HT</strong>: ' + gm_control_sheet[count].get_attribute('ht') + '</div>';
@@ -366,6 +384,7 @@ function gm_control_propogate_damage_form(character) {
 	debugConsole("gm_control_init_entry_form() called");
 	if(character) {
 		$(".js-char-entry-field-name").val( character.get_name() );
+		$(".js-char-entry-field-player").val( character.get_player() );
 
 		$(".js-char-entry-field-hp").val( character.get_secondary('hp') );
 		$(".js-char-entry-field-curr_hp").val( character.get_secondary('curr_hp') );
@@ -384,6 +403,7 @@ function gm_control_init_entry_form(character) {
 	debugConsole("gm_control_init_entry_form() called");
 	if(character) {
 		$(".js-char-field-name").val( character.get_name() );
+		$(".js-char-field-player").val( character.get_player() );
 
 		$(".js-char-field-st").val( character.get_attribute('st') );
 		$(".js-char-field-dx").val( character.get_attribute('dx') );
@@ -412,6 +432,7 @@ function gm_control_init_entry_form(character) {
 		$(".js-char-field-attack_skill").val( character.get_attack_skill() );
 	} else {
 		$(".js-char-field-name").val('');
+		$(".js-char-field-player").val('');
 
 		$(".js-char-field-st").val('10');
 		$(".js-char-field-dx").val('10');
@@ -517,6 +538,7 @@ function gm_control_update_edit_char(changed_name) {
 function gm_control_assign_data_to_char(character) {
 	debugConsole("gm_control_assign_data_to_char() called");
 	character.set_name( $(".js-char-field-name").val()  );
+	character.set_player( $(".js-char-field-player").val()  );
 
 	character.set_attribute("st", $(".js-char-field-st").val() / 1 );
 	character.set_attribute("dx", $(".js-char-field-dx").val() / 1 );
@@ -820,14 +842,15 @@ function gm_control_refresh_events() {
 
 			if( do_it ) {
 				item_index = $(this).attr("ref") / 1;
+				overwrite = false;
 				if($('.js-gm-control-load-dialog-overwrite').is(":checked"))
-					gm_control_sheet = Array();
+					overwrite = true;
 
-					loaded_items = local_storage_retrieve("gm_control_saved_items", item_index);
-					//for(loaded_item_count = 0; loaded_item_count < loaded_items.length; loaded_item_count++)
-					gm_control_import_json(JSON.stringify(loaded_items));
+				loaded_items = local_storage_retrieve("gm_control_saved_items", item_index);
+				//for(loaded_item_count = 0; loaded_item_count < loaded_items.length; loaded_item_count++)
+				gm_control_import_json(JSON.stringify(loaded_items), overwrite);
 
-					gm_control_display_sheet();
+				gm_control_display_sheet();
 				$('.js-gm-control-load-dialog').modal('hide');
 			}
 		});
@@ -850,10 +873,10 @@ function gm_control_refresh_events() {
 		load_html = "";
 		saved_items = local_storage_retrieve("gm_control_saved_items");
 		if(saved_items.length > 0) {
-			load_html += '<label><input type="checkbox" name="overwrite" class="js-gm-control-load-dialog-overwrite" /> Overwrite all items</label>';
+			load_html += '<label><input type="checkbox" name="overwrite" class="js-gm-control-load-dialog-overwrite" /> Overwrite NPCs</label>';
 			load_html += "<table>";
 			load_html += "<tr>";
-			load_html += "<th>Group Name</th>";
+			load_html += "<th>Encounter Name</th>";
 			load_html += "<th>Saved On</th>";
 			load_html += "<th>Number in Group</th>";
 			load_html += "<th>&nbsp;</th>";
@@ -984,15 +1007,18 @@ function gm_control_refresh_events() {
 	$(".js-gm-control-check-all").unbind('change');
 	$(".js-gm-control-check-all").change( function() {
 		debugConsole(".js-gm-control-check-all changeed");
-		if( $(".js-gm-control-check-all").is(":checked") )
+		if( $(".js-gm-control-check-all").is(":checked") ) {
 			$(".js-select-check").prop('checked',true);
-		else
+		} else {
 			$(".js-select-check").prop('checked',false);
+		}
 
 		gm_control_sheet_currently_selected = Array()
 		$(".js-select-check:checked").each( function() {
-			gm_control_sheet_currently_selected.push( $(this).attr('ref') / 1);
+			if( $(this).attr('is_pc') / 1 == 0 )
+				gm_control_sheet_currently_selected.push( $(this).attr('ref') / 1);
 		});
+		$(".js-select-check[is_pc=1]").prop('checked',false);
 	} );
 
 	$(".js-gm-control-trash").unbind('click');
