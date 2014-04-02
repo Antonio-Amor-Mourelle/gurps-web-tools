@@ -483,7 +483,7 @@ function gm_control_init_entry_form(character) {
 function gm_control_update_edit_char(changed_name) {
 	debugConsole("gm_control_update_edit_char() called");
 
-	if(changed_name == "st" || changed_name == "dx") {
+	if(changed_name == "ht" || changed_name == "dx") {
 		new_speed = ( $(".js-char-field-ht").val() / 1+ $(".js-char-field-dx").val() / 1 ) / 4;
 		$(".js-char-field-speed").val( new_speed );
 		$(".js-char-field-move").val( Math.floor($(".js-char-field-speed").val()  / 1) );
