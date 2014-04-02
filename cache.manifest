@@ -1,5 +1,6 @@
 CACHE MANIFEST
-# rev 2014022605
+# rev 2014040201
+# On April 2, 2014
 ./dice.html
 ./index.html
 ./gm_control.html
@@ -28,4 +29,4 @@ CACHE MANIFEST
 FALLBACK:
 
 NETWORK:
-
+*
