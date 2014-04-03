@@ -1,6 +1,6 @@
 CACHE MANIFEST
-# rev 2014040208
-# On April 2, 2014 Rev Awesome Eight
+# rev 2014040301
+# On April 3, 2014 Rev Uno
 ./dice.html
 ./index.html
 ./gm_control.html
@@ -13,6 +13,10 @@ CACHE MANIFEST
 ./fonts/glyphicons-halflings-regular.svg
 ./fonts/glyphicons-halflings-regular.ttf
 ./fonts/glyphicons-halflings-regular.woff
+
+
+./img/gurps_web_tools_50x50.png
+./img/gurps_web_tools_256x256.png
 
 ./js/background.js
 ./js/bootstrap.min.js
