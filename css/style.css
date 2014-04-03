@@ -1,3 +1,11 @@
+/*
+a {
+	color: #39a73c;
+}
+a:hover {
+	color: #317621;
+}
+*/
 h1 {
 	font-size: 30px;
 }
@@ -17,6 +25,7 @@ table th, table td {
 	border-bottom: 1px solid #333;
 	padding: 2px 5px;
 	white-space: nowrap;
+	vertical-align: top;
 	font-size: 14px;
 }
 
@@ -37,10 +46,18 @@ label {
 	display: block;
 }
 select,input[type="text"],textarea {
-	padding: 5px 10px;
+	padding: 1px 5px;
 	display: block;
 	width: 100%;
+	font-size: 12px;
+	outline: none;
 	resize: none;
+	background: #fff;
+	border: 1px solid #333;
+}
+select:focus,input[type="text"]:focus,textarea:focus {
+	border: 1px solid #428bca;
+	background: #c4d6e6;
 }
 .footer {
 	border-top: 2px solid #999;
@@ -258,10 +275,40 @@ h5 {
 }
 .shock-damage {
 	font-weight: bold;
-	color: #f00;
+	color: #fff;
+	background-color: #f00;
 	margin-right: 5px;
 	border: 1px solid #f00;
 	border-radius: 5px;
 	width: 10px;
 	height: 10px;
+	padding: 1px 2px;
+}
+.js-gm-control-damage-modify-dropdown {
+	display: none;
+	overflow: hidden;
+}
+.js-gm-control-fatigue-modify-dropdown {
+	display: none;
+	overflow: hidden;
+}
+
+.js-gm-control-load-saved-items .glyphicon {
+	font-size: 20px;
+}
+.js-gm-control-fatigue-modify-ok span,
+.js-gm-control-damage-modify-ok span,
+.js-gm-control-fatigue-modify-plus span,
+.js-gm-control-fatigue-modify-minus span,
+.js-gm-control-damage-modify-plus span,
+.js-gm-control-damage-modify-minus span {
+	font-size: 20px;
+}
+.js-gm-control-fatigue-modify-max,
+.js-gm-control-fatigue-modify-zero,
+.js-gm-control-damage-modify-max,
+.js-gm-control-damage-modify-zero,
+.js-gm-control-fatigue-modify-ok,
+.js-gm-control-damage-modify-ok {
+	display: none;
 }

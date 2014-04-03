@@ -122,77 +122,6 @@
 	</div>
 </div>
 
-<div class="js-gm-control-damage-dialog modal fade">
-	<div class="container">
-		<div class="modal-dialog">
-	    	<div class="modal-content">
-	      		<div class="modal-header">
-					<h4 class="modal-title js-gm-control-damage-dialog-title">XXXXing Entry</h4>
-				</div>
-				<div class="modal-body">
-					<div class="row">
-						<div class="col-xs-12">
-							<label>Name: <input readonly="1" type="text" class="js-char-entry-field-name" name="name" /></label>
-							<label>DR: <input readonly="1" type="text" class="js-char-entry-field-dr" name="dr" /></label>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-xs-3"><label>Curr HP: <input readonly="1" type="text" class="js-char-entry-field-curr_hp" name="curr_hp" /></label></div>
-						<div class="col-xs-3"><label>Max HP: <input readonly="1" type="text" class="js-char-entry-field-hp" name="hp" /></label></div>
-					</div>
-					<div class="row">
-						<div class="col-xs-12">
-							<label>Apply Damage:
-								<select class="js-applied-damage-field" name="applied-damage-field" />
-								</select>
-							</label>
-						</div>
-					</div>
-				</div>
-	      		<div class="modal-footer">
-		      		<button type="button" class="btn btn-default" data-dismiss="modal" data-dismiss="modal">Cancel</button>
-	        		<button type="button" class="btn btn-primary js-gm-control-damage-dialog-action-button" data-dismiss="modal">Apply Damage</button>
-	      		</div>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div class="js-gm-control-fatigue-dialog modal fade">
-	<div class="container">
-		<div class="modal-dialog">
-	    	<div class="modal-content">
-	      		<div class="modal-header">
-					<h4 class="modal-title js-gm-control-fatigue-dialog-title">XXXXing Entry</h4>
-				</div>
-				<div class="modal-body">
-					<div class="row">
-						<div class="col-xs-12">
-							<label>Name: <input readonly="1" type="text" class="js-char-entry-field-name" name="name" /></label>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-xs-3"><label>Curr Fatigue: <input readonly="1" type="text" class="js-char-entry-field-curr_fatigue" name="curr_fatigue" /></label></div>
-						<div class="col-xs-3"><label>Max Fatigue: <input readonly="1" type="text" class="js-char-entry-field-fatigue" name="fatigue" /></label></div>
-					</div>
-					<div class="row">
-						<div class="col-xs-12">
-							<label>Apply Fatigue:
-								<select class="js-applied-fatigue-field" name="applied-fatigue-field" />
-								</select>
-							</label>
-						</div>
-					</div>
-				</div>
-	      		<div class="modal-footer">
-		      		<button type="button" class="btn btn-default" data-dismiss="modal" data-dismiss="modal">Cancel</button>
-	        		<button type="button" class="btn btn-primary js-gm-control-fatigue-dialog-action-button" data-dismiss="modal">Apply Fatigue</button>
-	      		</div>
-			</div>
-		</div>
-	</div>
-</div>
-
 <div class="js-gm-control-line-dialog modal fade">
 	<div class="container">
 		<div class="modal-dialog">
@@ -340,14 +269,14 @@
 				<thead>
 					<tr>
 						<th class="min-width text-right"><input title="Select all NPCs" type="checkbox" class="js-gm-control-check-all" /></th>
-						<th><a href="#" title="Sort by Name" class="js-gm-control-sort-by-name">Name</a></th>
-						<th><a href="#" title="Sort by Base Speed, then DX, then a random roll" class="js-gm-control-sort-by-base-speed">Spd</a></th>
-						<th>Mv</th>
-						<th>Defense<br />Ddg/Blk/Pry</th>
-						<th>DR</th>
-						<th>HP<br />Cur/Max</th>
-						<th>Fatigue<br />Cur/Max</th>
-						<th>Attack<br />Skill</th>
+						<th class="text-center"><a href="#" title="Sort by Name" class="js-gm-control-sort-by-name">Name</a></th>
+						<th class="text-center"><a href="#" title="Sort by Base Speed, then DX, then a random roll" class="js-gm-control-sort-by-base-speed">Spd</a></th>
+						<th class="text-center">Mv</th>
+						<th class="text-center">Defense<br />Ddg/Blk/Pry</th>
+						<th class="text-center">DR</th>
+						<th class="text-center">HP<br />Cur/Max</th>
+						<th class="text-center">Fatigue<br />Cur/Max</th>
+						<th class="text-center">Attack<br />Skill</th>
 						<th class="hidden-xs">&nbsp;</th>
 					</tr>
 				</thead>
